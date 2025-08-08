@@ -13,14 +13,26 @@
             font-family: 'Inter', sans-serif;
             background-color: #f4f7f6;
         }
-        .task-comments {
-            max-height: 0;
+
+        /* --- Sửa lỗi UI bằng CSS Grid --- */
+        .task {
+            display: grid;
+            /* Dòng 1 (header) tự động, Dòng 2 (comments) thu gọn */
+            grid-template-rows: auto 0fr; 
+            transition: grid-template-rows 0.4s ease-out;
+        }
+
+        .task.open {
+            /* Dòng 1 (header) tự động, Dòng 2 (comments) mở rộng theo nội dung */
+            grid-template-rows: auto 1fr;
+        }
+
+        .task-comments-wrapper {
+            /* Đảm bảo nội dung không tràn ra ngoài trong quá trình chuyển động */
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
         }
-        .task.open .task-comments {
-            max-height: 1000px; /* Adjust as needed */
-        }
+        /* --- Kết thúc sửa lỗi --- */
+
         .task.open .toggle-icon {
             transform: rotate(90deg);
         }
@@ -35,6 +47,11 @@
         <header class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Báo cáo Tình trạng Dự án</h1>
             <p class="text-gray-500 mt-1">Dữ liệu được cập nhật tự động từ file JSON.</p>
+            <!-- Nút Mở rộng/Thu gọn -->
+            <div class="mt-4 flex gap-2">
+                <button id="expand-all-btn" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Mở rộng tất cả</button>
+                <button id="collapse-all-btn" class="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">Thu gọn tất cả</button>
+            </div>
         </header>
 
         <main id="report-container">
@@ -46,7 +63,6 @@
     <script>
         // Hàm để tạo badge trạng thái với màu sắc tương ứng
         function getStatusBadge(status) {
-            // Chuẩn hóa status về chữ thường để so sánh
             const lowerCaseStatus = status.toLowerCase();
             switch (lowerCaseStatus) {
                 case 'completed':
@@ -84,9 +100,7 @@
 
             let reportHtml = '';
             data.forEach(project => {
-                // Sắp xếp các task theo ID giảm dần để task mới nhất lên đầu
                 const sortedTasks = project.tasks.sort((a, b) => b.task_id.localeCompare(a.task_id));
-
                 const tasksHtml = sortedTasks.map(task => {
                     const commentsHtml = task.comments.map(comment => `
                         <div class="p-4 bg-gray-50 rounded-lg mt-3 border-l-4 border-gray-300">
@@ -97,10 +111,10 @@
                             <p class="text-sm text-gray-800 whitespace-pre-wrap">${comment.comment_plain.trim()}</p>
                         </div>
                     `).join('');
-
-                    // Thêm class 'open' để các task được mở sẵn
+                    
+                    // Đã xóa class 'open' để các task được thu gọn mặc định
                     return `
-                        <div class="task open border border-gray-200 rounded-lg bg-white">
+                        <div class="task border border-gray-200 rounded-lg bg-white">
                             <div class="task-header p-4 cursor-pointer flex items-center justify-between hover:bg-gray-50">
                                 <div class="flex-grow">
                                     <div class="flex items-center gap-3 mb-2">
@@ -115,8 +129,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="task-comments px-4 pb-4 ml-8 border-l-2 border-gray-200">
-                                ${commentsHtml || '<p class="text-sm text-gray-500 italic mt-2">Không có bình luận nào.</p>'}
+                            <div class="task-comments-wrapper">
+                                <div class="task-comments-content px-4 pb-4 ml-8 border-l-2 border-gray-200">
+                                    ${commentsHtml || '<p class="text-sm text-gray-500 italic mt-2">Không có bình luận nào.</p>'}
+                                </div>
                             </div>
                         </div>
                     `;
@@ -151,7 +167,7 @@
             container.innerHTML = reportHtml;
         }
 
-        // Thêm sự kiện click để mở/đóng các task
+        // Thêm sự kiện click để mở/đóng từng task
         document.addEventListener('click', function(e) {
             const taskHeader = e.target.closest('.task-header');
             if (taskHeader) {
@@ -162,6 +178,22 @@
 
         // Tải dữ liệu từ file JSON và render báo cáo khi trang được tải
         document.addEventListener('DOMContentLoaded', () => {
+            // Gán sự kiện cho các nút Mở rộng/Thu gọn
+            const expandAllBtn = document.getElementById('expand-all-btn');
+            const collapseAllBtn = document.getElementById('collapse-all-btn');
+            const reportContainer = document.getElementById('report-container');
+
+            expandAllBtn.addEventListener('click', () => {
+                const allTasks = reportContainer.querySelectorAll('.task');
+                allTasks.forEach(task => task.classList.add('open'));
+            });
+
+            collapseAllBtn.addEventListener('click', () => {
+                const allTasks = reportContainer.querySelectorAll('.task');
+                allTasks.forEach(task => task.classList.remove('open'));
+            });
+
+            // Tải dữ liệu
             fetch('out/report.json')
                 .then(response => {
                     if (!response.ok) {
@@ -174,11 +206,10 @@
                 })
                 .catch(error => {
                     console.error('Lỗi khi tải dữ liệu báo cáo:', error);
-                    const container = document.getElementById('report-container');
-                    container.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
-                                            <p class="font-bold">Không thể tải dữ liệu</p>
-                                            <p>Đã xảy ra lỗi khi cố gắng tải file <code>out/report.json</code>. Vui lòng kiểm tra lại đường dẫn và đảm bảo file tồn tại.</p>
-                                         </div>`;
+                    reportContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+                                                    <p class="font-bold">Không thể tải dữ liệu</p>
+                                                    <p>Đã xảy ra lỗi khi cố gắng tải file <code>out/report.json</code>. Vui lòng kiểm tra lại đường dẫn và đảm bảo file tồn tại.</p>
+                                                 </div>`;
                 });
         });
 
