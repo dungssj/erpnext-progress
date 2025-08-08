@@ -173,13 +173,7 @@
         "task_status": "Open",
         "task_progress": 0,
         "task_priority": "Low",
-        "comments": [
-          {
-            "comment_time": "2025-08-06 17:04:50.400149",
-            "comment_owner": "dung.le@fassmart.com",
-            "comment_plain": "<div class=\"ql-editor read-mode\"><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><p>[LOẠI]: Tóm tắt ngắn gọn (1 dòng, dưới 30 ký tự)</p><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><p>Nội dung chi tiết (tùy chọn):</p><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><p>- Mô tả cập nhật, vấn đề nếu có, kế hoạch tiếp theo (viết ngắn gọn, trang trọng).</p><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><p>Tham chiếu (tùy chọn):</p><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><p>- File đính kèm hoặc liên kết (ví dụ: Nhiệm vụ #PROJ-123, file hợp đồng).</p><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p></div>"
-          }
-        ]
+        "comments": []
       },
       {
         "task_id": "TASK-2025-00077",
@@ -855,6 +849,14 @@
         "task_status": "Working",
         "task_progress": 0,
         "task_priority": "High",
+        "comments": []
+      },
+      {
+        "task_id": "TASK-2025-00149",
+        "task_subject": "Tìm nhà cung cấp đồ đựng vệ sinh",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Medium",
         "comments": []
       },
       {
