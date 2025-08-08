@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Tình trạng Dự án</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+        }
+        .task-comments {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .task.open .task-comments {
+            max-height: 1000px; /* Adjust as needed */
+        }
+        .task.open .toggle-icon {
+            transform: rotate(90deg);
+        }
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Báo cáo Tình trạng Dự án</h1>
+            <p class="text-gray-500 mt-1">Dữ liệu được cập nhật tự động từ file JSON.</p>
+        </header>
+
+        <main id="report-container">
+            <!-- Dữ liệu dự án sẽ được chèn vào đây bằng JavaScript -->
+            <p class="text-gray-500">Đang tải dữ liệu báo cáo...</p>
+        </main>
+    </div>
+
+    <script>
+        // Hàm để tạo badge trạng thái với màu sắc tương ứng
+        function getStatusBadge(status) {
+            // Chuẩn hóa status về chữ thường để so sánh
+            const lowerCaseStatus = status.toLowerCase();
+            switch (lowerCaseStatus) {
+                case 'completed':
+                    return `<span class="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">${status}</span>`;
+                case 'working':
+                    return `<span class="inline-block px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-200 rounded-full">${status}</span>`;
+                case 'pending review':
+                    return `<span class="inline-block px-2 py-1 text-xs font-semibold text-purple-800 bg-purple-200 rounded-full">${status}</span>`;
+                case 'open':
+                    return `<span class="inline-block px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">${status}</span>`;
+                default:
+                    return `<span class="inline-block px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-200 rounded-full">${status}</span>`;
+            }
+        }
+
+        // Hàm để định dạng ngày giờ
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return date.toLocaleString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Hàm chính để render báo cáo
+        function renderReport(data) {
+            const container = document.getElementById('report-container');
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">Không có dữ liệu dự án để hiển thị.</p>';
+                return;
+            }
+
+            let reportHtml = '';
+            data.forEach(project => {
+                // Sắp xếp các task theo ID giảm dần để task mới nhất lên đầu
+                const sortedTasks = project.tasks.sort((a, b) => b.task_id.localeCompare(a.task_id));
+
+                const tasksHtml = sortedTasks.map(task => {
+                    const commentsHtml = task.comments.map(comment => `
+                        <div class="p-4 bg-gray-50 rounded-lg mt-3 border-l-4 border-gray-300">
+                            <div class="flex justify-between items-center text-xs text-gray-500 mb-2">
+                                <span class="font-semibold text-gray-700">${comment.comment_owner}</span>
+                                <span>${formatDateTime(comment.comment_time)}</span>
+                            </div>
+                            <p class="text-sm text-gray-800 whitespace-pre-wrap">${comment.comment_plain.trim()}</p>
+                        </div>
+                    `).join('');
+
+                    // Thêm class 'open' để các task được mở sẵn
+                    return `
+                        <div class="task open border border-gray-200 rounded-lg bg-white">
+                            <div class="task-header p-4 cursor-pointer flex items-center justify-between hover:bg-gray-50">
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="toggle-icon text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                                        </span>
+                                        <h4 class="font-semibold text-gray-800">${task.task_subject}</h4>
+                                    </div>
+                                    <div class="flex items-center gap-4 pl-8 text-sm text-gray-500">
+                                        <span>${task.task_id}</span>
+                                        ${getStatusBadge(task.task_status)}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="task-comments px-4 pb-4 ml-8 border-l-2 border-gray-200">
+                                ${commentsHtml || '<p class="text-sm text-gray-500 italic mt-2">Không có bình luận nào.</p>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                reportHtml += `
+                    <div class="project-card bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="uppercase tracking-wide text-sm text-indigo-600 font-semibold">${project.project_company}</div>
+                                    <h2 class="text-2xl font-bold text-gray-900 mt-1">${project.project_name}</h2>
+                                    <p class="text-gray-500 text-sm mt-1">${project.project_id}</p>
+                                </div>
+                                ${getStatusBadge(project.project_status)}
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-sm font-medium text-gray-600 mb-1">Tiến độ tổng thể</p>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-indigo-500 h-3 rounded-full" style="width: ${project.project_percent}%"></div>
+                                </div>
+                                <p class="text-right text-sm text-gray-500 mt-1">${project.project_percent}%</p>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                             <h3 class="text-lg font-semibold text-gray-700 mb-4">Danh sách công việc</h3>
+                             <div class="space-y-4">${tasksHtml}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = reportHtml;
+        }
+
+        // Thêm sự kiện click để mở/đóng các task
+        document.addEventListener('click', function(e) {
+            const taskHeader = e.target.closest('.task-header');
+            if (taskHeader) {
+                const taskElement = taskHeader.closest('.task');
+                taskElement.classList.toggle('open');
+            }
+        });
+
+        // Tải dữ liệu từ file JSON và render báo cáo khi trang được tải
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('out/report.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderReport(data);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu báo cáo:', error);
+                    const container = document.getElementById('report-container');
+                    container.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+                                            <p class="font-bold">Không thể tải dữ liệu</p>
+                                            <p>Đã xảy ra lỗi khi cố gắng tải file <code>out/report.json</code>. Vui lòng kiểm tra lại đường dẫn và đảm bảo file tồn tại.</p>
+                                         </div>`;
+                });
+        });
+
+    </script>
+</body>
+</html>

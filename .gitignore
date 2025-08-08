@@ -1,0 +1,6 @@
+.env
+package-lock.json
+node_modules/
+debug_comment.js
+progress_report_v2.js
+progress_report.js
