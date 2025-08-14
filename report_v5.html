@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Tiến độ Dự án</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Google Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS tùy chỉnh cho giao diện báo cáo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Màu nền xám nhạt */
+            color: #111827;
+        }
+        /* Tạo khung trang giấy */
+        .report-paper {
+            max-width: 8.5in; /* Tương đương chiều rộng giấy Letter/A4 */
+            min-height: 11in; /* Tương đương chiều cao giấy */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+        }
+        /* Tùy chỉnh cho nội dung HTML từ comment */
+        .comment-content {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .comment-content p,
+        .comment-content ol,
+        .comment-content ul {
+            margin-bottom: 0.5rem;
+        }
+        .comment-content ol, .comment-content ul {
+            padding-left: 1.25rem;
+        }
+        .comment-content a {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .comment-content strong {
+            font-weight: 600;
+        }
+        .ql-editor.read-mode {
+            padding: 0;
+            font-size: inherit;
+            line-height: inherit;
+        }
+        .ql-ui { display: none; }
+
+        /* CSS cho việc in ấn */
+        @media print {
+            body {
+                background-color: #ffffff;
+            }
+            .report-paper {
+                box-shadow: none;
+                margin: 0 0 2rem 0;
+                max-width: 100%;
+                border: none;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Container chính sẽ chứa một hoặc nhiều báo cáo -->
+    <div id="reports-container"></div>
+
+    <script>
+        // Dữ liệu JSON mới, là một mảng các dự án
+        const reportData = [
+          {
+            "project_id": "PROJ-0019",
+            "project_name": "Triển khai ERP cho Công ty F",
+            "project_status": "Open",
+            "project_company": "Công ty F",
+            "project_percent": 65,
+            "tasks": [
+              {
+                "task_id": "TASK-0001",
+                "task_subject": "Chuẩn bị dữ liệu ban đầu",
+                "task_status": "Completed",
+                "comments": [
+                  { "comment_time": "2025-08-01 09:15:23", "comment_owner": "admin@example.com", "comment_html": "<p>Đã nhập xong dữ liệu khách hàng</p>" },
+                  { "comment_time": "2025-08-02 14:11:10", "comment_owner": "user1@example.com", "comment_html": "<p>Kiểm tra và xác nhận</p>" }
+                ],
+                "children": []
+              },
+              {
+                "task_id": "TASK-0002",
+                "task_subject": "Cấu hình hệ thống",
+                "task_status": "Working",
+                "comments": [],
+                "children": [
+                  {
+                    "task_id": "TASK-0003",
+                    "task_subject": "Cấu hình phân quyền",
+                    "task_status": "Open",
+                    "comments": [
+                      { "comment_time": "2025-08-03 10:45:00", "comment_owner": "user2@example.com", "comment_html": "<p>Đang cấu hình quyền cho phòng Kế toán</p>" }
+                    ],
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ];
+
+        /**
+         * Hàm đệ quy để render cây công việc
+         * @param {Array} tasks - Mảng các công việc cần render
+         * @param {number} level - Cấp độ lồng nhau, dùng để thụt lề
+         * @returns {string} - Chuỗi HTML của cây công việc
+         */
+        function renderTaskTree(tasks, level) {
+            if (!tasks || tasks.length === 0) {
+                return '';
+            }
+
+            // *** THAY ĐỔI LOGIC ICON Ở ĐÂY: Dùng ký tự và căn chỉnh bằng Flexbox ***
+            const icons = [
+                // Cấp 0: Dấu gạch ngang
+                `<span class="w-5 h-5 flex items-center justify-center mr-1 text-lg font-semibold flex-shrink-0">-</span>`,
+                // Cấp 1: Dấu cộng
+                `<span class="w-5 h-5 flex items-center justify-center mr-1 text-lg font-semibold flex-shrink-0">+</span>`,
+                // Cấp 2 trở đi: Dấu chấm tròn
+                `<span class="w-5 h-5 flex items-center justify-center mr-1 text-lg font-semibold flex-shrink-0">•</span>`
+            ];
+            
+            let html = '';
+            tasks.forEach(task => {
+                // Chọn icon dựa trên cấp độ, nếu cấp độ lớn hơn số icon có sẵn thì dùng icon cuối cùng
+                const taskIcon = icons[level] || icons[icons.length - 1];
+
+                const paddingLeft = level * 1.25; // 1.25rem = 20px
+                const isParentTask = task.children && task.children.length > 0;
+
+                let commentsSectionHtml = '';
+                // Chỉ hiển thị phần comment nếu task không phải là task cha
+                if (!isParentTask) {
+                    const commentsHtml = task.comments.map(comment => {
+                        const commentDate = new Date(comment.comment_time).toLocaleString('vi-VN', {
+                            day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                        });
+                        return `
+                            <div class="border-l-2 border-gray-200 pl-4">
+                                <p class="text-xs text-gray-500">${comment.comment_owner} - ${commentDate}</p>
+                                <div class="mt-1 comment-content">
+                                    ${comment.comment_html}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    commentsSectionHtml = `
+                        <div class="pl-6 mt-2 space-y-4">
+                            ${commentsHtml.length > 0 ? commentsHtml : '<p class="text-sm text-gray-500 italic">Chưa có báo cáo.</p>'}
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="mt-4" style="padding-left: ${paddingLeft}rem;">
+                        <div class="flex items-center">
+                            ${taskIcon}
+                            <p class="text-sm font-semibold">
+                                ${task.task_subject}
+                                <span class="font-normal text-gray-600">(${task.task_status})</span>
+                            </p>
+                        </div>
+                        ${commentsSectionHtml}
+                        <!-- Gọi đệ quy để render các task con -->
+                        ${renderTaskTree(task.children, level + 1)}
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        /**
+         * Hàm chính để render tất cả các báo cáo dự án
+         * @param {Array} projectsData - Mảng dữ liệu các dự án
+         */
+        function renderAllReports(projectsData) {
+            const reportsContainer = document.getElementById('reports-container');
+            reportsContainer.innerHTML = ''; // Xóa nội dung cũ
+
+            const today = new Date().toLocaleDateString('vi-VN', {
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            });
+
+            projectsData.forEach(project => {
+                // Tạo một "tờ giấy" cho mỗi dự án
+                const reportElement = document.createElement('div');
+                reportElement.className = 'report-paper bg-white p-8 sm:p-12';
+
+                // Render header
+                const headerHtml = `
+                    <div class="border-b border-gray-300 pb-4 mb-2">
+                        <h1 class="text-2xl font-bold text-gray-900">${project.project_name}</h1>
+                        <p class="text-sm text-gray-500 mt-1">Báo cáo tiến độ - Ngày ${today}</p>
+                    </div>
+                `;
+
+                // Render cây công việc
+                const taskTreeHtml = renderTaskTree(project.tasks, 0);
+
+                reportElement.innerHTML = headerHtml + taskTreeHtml;
+                reportsContainer.appendChild(reportElement);
+            });
+        }
+
+         document.addEventListener('DOMContentLoaded', () => {
+            fetch('out/report2.json')
+                .then(response => response.ok ? response.json() : Promise.reject(response))
+                .then(data => renderAllReports(data))
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu báo cáo:', error);
+                    reportContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert"><p class="font-bold">Không thể tải dữ liệu</p><p>Đã xảy ra lỗi khi cố gắng tải file <code>out/report.json</code>. Vui lòng kiểm tra lại đường dẫn và đảm bảo file tồn tại.</p></div>`;
+                });
+            
+        });
+    </script>
+
+</body>
+</html>

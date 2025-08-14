@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Tình trạng Dự án</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .task-node {
+            display: grid;
+            grid-template-rows: auto 0fr;
+            transition: grid-template-rows 0.3s ease-out;
+        }
+
+        .task-node.open {
+            grid-template-rows: auto 1fr;
+        }
+
+        .task-content-wrapper {
+            overflow: hidden;
+        }
+        
+        .task-node.open .toggle-icon {
+            transform: rotate(90deg);
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .task-node.is-leaf .toggle-icon {
+            visibility: hidden;
+        }
+
+        /* --- Task Tree View Styles --- */
+        .task-tree-level {
+            position: relative;
+        }
+        
+        .task-entry {
+            position: relative;
+            padding-left: 1.75rem; /* 28px */
+        }
+        
+        /* Vertical line for the level */
+        .task-tree-level > .task-entry::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem; /* 8px */
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #e2e8f0; /* coolGray-200 */
+        }
+        
+        /* Horizontal line for each entry */
+        .task-entry::after {
+            content: '';
+            position: absolute;
+            left: 0.5rem; /* 8px */
+            top: 1rem; /* 16px, adjust to vertically center with icon/text */
+            width: 0.75rem; /* 12px */
+            height: 1px;
+            background-color: #e2e8f0;
+        }
+        
+        /* For the last entry in a level, shorten the vertical line */
+        .task-tree-level > .task-entry.is-last::before {
+            height: 1rem; /* Stop at the horizontal line */
+        }
+
+        /* --- Comment Content Styling --- */
+        .comment-content p { margin-bottom: 0.5rem; }
+        .comment-content p:last-child { margin-bottom: 0; }
+        .comment-content strong { font-weight: 600; }
+        .comment-content em { font-style: italic; }
+        .comment-content ol, .comment-content ul { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .comment-content ol { list-style-type: decimal; }
+        .comment-content ul { list-style-type: disc; }
+        .comment-content li { margin-bottom: 0.25rem; }
+        .comment-content a { color: #2563eb; text-decoration: underline; }
+
+        /* --- CSS Tối ưu cho việc in ấn (Print-Friendly CSS) --- */
+        @media print {
+            /* Ẩn các thành phần không cần thiết khi in */
+            header, #expand-all-btn, #collapse-all-btn {
+                display: none !important;
+            }
+
+            /* Buộc tất cả các task phải mở ra để hiển thị đầy đủ nội dung */
+            .task-node {
+                grid-template-rows: auto 1fr !important;
+            }
+            .toggle-icon {
+                display: none !important;
+            }
+
+            /* Tối ưu hóa màu sắc để dễ đọc và tiết kiệm mực */
+            body, .project-card, .task-header, .comment-item div {
+                background-color: #fff !important;
+                color: #000 !important;
+            }
+            
+            /* Loại bỏ đổ bóng và thêm đường viền mảnh để phân tách */
+            .project-card, .comment-item .rounded-xl {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+            
+            /* Đảm bảo các huy hiệu trạng thái vẫn đọc được */
+            span[class*="-100"] {
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+            
+            /* Loại bỏ các đường kẻ của cây để giao diện in sạch sẽ hơn */
+            .task-tree-level > .task-entry::before,
+            .task-entry::after,
+            .comment-item .absolute {
+                display: none !important;
+            }
+
+            /* Điều chỉnh lại padding khi không còn đường kẻ */
+            .task-entry, .comment-item {
+                padding-left: 0 !important;
+            }
+            
+            /* Kiểm soát ngắt trang để tránh bị cắt nội dung không mong muốn */
+            .project-card, .task-entry {
+                page-break-inside: avoid;
+            }
+        }
+
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header>
+            <h1 class="text-3xl font-bold text-gray-800">Báo cáo Tình trạng Dự án</h1>
+            <p class="text-gray-500 mt-1">Dữ liệu được cập nhật tự động từ file JSON.</p>
+            <div class="mt-4 flex gap-2">
+                <button id="expand-all-btn" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Mở rộng tất cả</button>
+                <button id="collapse-all-btn" class="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">Thu gọn tất cả</button>
+            </div>
+        </header>
+
+        <main id="report-container" class="mt-8">
+            <p class="text-gray-500">Đang tải dữ liệu báo cáo...</p>
+        </main>
+    </div>
+
+    <script>
+        // --- Helper Functions ---
+        function getStatusBadge(status) {
+            const lowerCaseStatus = status ? status.toLowerCase() : '';
+            switch (lowerCaseStatus) {
+                case 'completed': return `<span class="inline-block px-2 py-0.5 text-xs font-semibold text-green-800 bg-green-100 rounded-full">${status}</span>`;
+                case 'working': return `<span class="inline-block px-2 py-0.5 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">${status}</span>`;
+                case 'pending review': return `<span class="inline-block px-2 py-0.5 text-xs font-semibold text-purple-800 bg-purple-100 rounded-full">${status}</span>`;
+                case 'open': return `<span class="inline-block px-2 py-0.5 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">${status}</span>`;
+                default: return `<span class="inline-block px-2 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full">${status}</span>`;
+            }
+        }
+
+        function getInitials(email) {
+            if (!email) return '??';
+            const namePart = email.split('@')[0];
+            const parts = namePart.split(/[._-]/);
+            if (parts.length > 1) {
+                return (parts[0][0] + (parts[parts.length - 1][0] || '')).toUpperCase();
+            }
+            return (namePart.substring(0, 2) || '??').toUpperCase();
+        }
+
+        function getUserColor(owner) {
+            const colors = [
+                { bg: 'bg-pink-100', text: 'text-pink-600' }, { bg: 'bg-indigo-100', text: 'text-indigo-600' },
+                { bg: 'bg-blue-100', text: 'text-blue-600' }, { bg: 'bg-green-100', text: 'text-green-600' },
+                { bg: 'bg-yellow-100', text: 'text-yellow-600' }, { bg: 'bg-purple-100', text: 'text-purple-600' },
+                { bg: 'bg-red-100', text: 'text-red-600' }, { bg: 'bg-teal-100', text: 'text-teal-600' },
+            ];
+            let hash = 0;
+            for (let i = 0; i < (owner || '').length; i++) {
+                hash = owner.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash % colors.length);
+            return colors[index];
+        }
+
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return '';
+            const date = new Date(dateTimeString);
+            return date.toLocaleString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // --- Main Render Functions ---
+        function renderTaskTree(tasks) {
+            if (!tasks || tasks.length === 0) return '';
+            
+            let html = '<div class="task-tree-level space-y-1">';
+            tasks.forEach((task, index) => {
+                const hasChildren = task.children && task.children.length > 0;
+                const hasComments = task.comments && task.comments.length > 0;
+                const isLeaf = !hasChildren && !hasComments;
+                const isLast = index === tasks.length - 1;
+
+                const commentsHtml = !hasComments ? '' : `<div class="relative mt-4">${task.comments.map((comment, cIndex) => {
+                    const color = getUserColor(comment.comment_owner);
+                    return `
+                    <div class="comment-item relative pl-10 ${cIndex < task.comments.length - 1 ? 'pb-6' : ''}">
+                        <!-- Timeline line -->
+                        <div class="absolute left-4 top-5 h-full w-0.5 bg-gray-200"></div>
+                        
+                        <!-- Timeline icon -->
+                        <div class="absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 ring-8 ring-gray-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+
+                        <!-- Main content -->
+                        <div class="flex items-center text-xs text-gray-500">
+                             <div class="w-5 h-5 mr-2 rounded-full ${color.bg} ${color.text} flex items-center justify-center font-bold" style="font-size: 0.6rem;">
+                                ${getInitials(comment.comment_owner)}
+                            </div>
+                            <span class="font-semibold text-gray-800">${comment.comment_owner.split('@')[0]}</span>
+                            <span class="mx-1.5 text-gray-400">·</span>
+                            <span>${formatDateTime(comment.comment_time)}</span>
+                        </div>
+                        <div class="mt-2 rounded-xl border bg-white p-3 shadow-sm">
+                            <div class="comment-content text-sm text-gray-800">
+                                ${comment.comment_html || ''}
+                            </div>
+                        </div>
+                    </div>
+                `}).join('')}</div>`;
+
+                const childrenHtml = hasChildren ? renderTaskTree(task.children) : '';
+                
+                html += `
+                    <div class="task-entry ${isLast ? 'is-last' : ''}">
+                        <div class="task-node ${isLeaf ? 'is-leaf' : ''}">
+                            <div class="task-header p-1.5 cursor-pointer hover:bg-gray-100 rounded-md flex items-center justify-between">
+                                <div class="flex items-center gap-2 flex-grow min-w-0">
+                                    <span class="toggle-icon text-gray-400 hover:text-gray-800 flex-shrink-0">
+                                        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                                    </span>
+                                    <span class="font-medium text-gray-800 text-sm truncate" title="${task.task_subject}">${task.task_subject}</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs text-gray-500 pr-2 flex-shrink-0">
+                                     <span>${task.task_id}</span>
+                                     ${getStatusBadge(task.task_status)}
+                                </div>
+                            </div>
+                            <div class="task-content-wrapper">
+                                <div class="pt-1 pl-3">
+                                    ${commentsHtml}
+                                    ${childrenHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderReport(data) {
+            const container = document.getElementById('report-container');
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">Không có dữ liệu dự án.</p>';
+                return;
+            }
+
+            let reportHtml = '';
+            data.forEach(project => {
+                const tasksHtml = renderTaskTree(project.tasks);
+                reportHtml += `
+                    <div class="project-card bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                        <div class="p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="uppercase tracking-wide text-xs text-indigo-600 font-semibold">${project.project_company}</div>
+                                    <h2 class="text-xl font-bold text-gray-900">${project.project_name}</h2>
+                                    <p class="text-gray-500 text-xs mt-0.5">${project.project_id}</p>
+                                </div>
+                                ${getStatusBadge(project.project_status)}
+                            </div>
+                            <div class="mt-3">
+                                <p class="text-xs font-medium text-gray-600 mb-1">Tiến độ tổng thể</p>
+                                <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: ${project.project_percent}%"></div></div>
+                                <p class="text-right text-xs text-gray-500 mt-1">${project.project_percent}%</p>
+                            </div>
+                        </div>
+                        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                             <h3 class="text-base font-semibold text-gray-700 mb-3">Danh sách công việc</h3>
+                             <div class="task-tree">${tasksHtml}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            const template = document.createElement('template');
+            template.innerHTML = reportHtml.trim();
+            container.innerHTML = ''; 
+            container.appendChild(template.content.cloneNode(true));
+        }
+
+        // --- Event Listeners and Initialization ---
+        document.addEventListener('click', function(e) {
+            const taskHeader = e.target.closest('.task-header');
+            if (taskHeader) {
+                const taskNode = taskHeader.closest('.task-node');
+                if (taskNode && !taskNode.classList.contains('is-leaf')) {
+                    taskNode.classList.toggle('open');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const expandAllBtn = document.getElementById('expand-all-btn');
+            const collapseAllBtn = document.getElementById('collapse-all-btn');
+            const reportContainer = document.getElementById('report-container');
+
+            expandAllBtn.addEventListener('click', () => {
+                reportContainer.querySelectorAll('.task-node:not(.is-leaf)').forEach(task => task.classList.add('open'));
+            });
+
+            collapseAllBtn.addEventListener('click', () => {
+                reportContainer.querySelectorAll('.task-node').forEach(task => task.classList.remove('open'));
+            });
+
+            fetch('out/report2.json')
+                .then(response => response.ok ? response.json() : Promise.reject(response))
+                .then(data => renderReport(data))
+                .catch(error => {
+                    console.error('Lỗi khi tải dữ liệu báo cáo:', error);
+                    reportContainer.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert"><p class="font-bold">Không thể tải dữ liệu</p><p>Đã xảy ra lỗi khi cố gắng tải file <code>out/report.json</code>. Vui lòng kiểm tra lại đường dẫn và đảm bảo file tồn tại.</p></div>`;
+                });
+        });
+    </script>
+</body>
+</html>
