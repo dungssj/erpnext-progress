@@ -14,16 +14,36 @@
         /* CSS tùy chỉnh cho giao diện báo cáo */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Màu nền xám nhạt */
+            /* Nền trắng mặc định cho di động */
+            background-color: #ffffff;
             color: #111827;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        /* Tạo khung trang giấy */
+
+        /* Khung chứa báo cáo */
         .report-paper {
-            max-width: 8.5in; /* Tương đương chiều rộng giấy Letter/A4 */
-            min-height: 11in; /* Tương đương chiều cao giấy */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 2rem auto;
+            width: 100%;
+            background-color: #ffffff;
+            /* Lề cho di động */
+            padding: 1.5rem 1rem;
         }
+
+        /* Áp dụng style "tờ giấy" cho màn hình lớn (desktop) */
+        @media (min-width: 768px) {
+            body {
+                /* Nền xám trên desktop để làm nổi bật tờ giấy */
+                background-color: #f3f4f6;
+            }
+            .report-paper {
+                max-width: 8.5in;
+                min-height: 11in;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin: 2rem auto;
+                padding: 3rem; /* Lề lớn hơn cho desktop */
+            }
+        }
+
         /* Tùy chỉnh cho nội dung HTML từ comment */
         .comment-content {
             font-size: 0.875rem;
@@ -58,17 +78,15 @@
             }
             .report-paper {
                 box-shadow: none;
-                margin: 0 0 2rem 0;
+                margin: 0;
                 max-width: 100%;
                 border: none;
-            }
-            .no-print {
-                display: none;
+                padding: 0;
             }
         }
     </style>
 </head>
-<body class="p-4 sm:p-8">
+<body>
 
     <!-- Container chính sẽ chứa một hoặc nhiều báo cáo -->
     <div id="reports-container"></div>
@@ -115,37 +133,72 @@
         ];
 
         /**
-         * Hàm đệ quy để render cây công việc
-         * @param {Array} tasks - Mảng các công việc cần render
-         * @param {number} level - Cấp độ lồng nhau, dùng để thụt lề
-         * @returns {string} - Chuỗi HTML của cây công việc
+         * Chuyển số thành chữ số La Mã.
+         * @param {number} num - Số cần chuyển đổi.
+         * @returns {string} - Chuỗi La Mã.
          */
-        function renderTaskTree(tasks, level) {
+        function toRoman(num) {
+            if (num < 1) return '';
+            const roman = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+            let str = '';
+            for (let i of Object.keys(roman)) {
+                let q = Math.floor(num / roman[i]);
+                num -= q * roman[i];
+                str += i.repeat(q);
+            }
+            return str;
+        }
+
+        /**
+         * Chuyển số thành ký tự alphabet (0 -> a, 1 -> b).
+         * @param {number} num - Số cần chuyển đổi (bắt đầu từ 0).
+         * @returns {string} - Ký tự alphabet tương ứng.
+         */
+        function toAlpha(num) {
+            return String.fromCharCode(97 + num);
+        }
+
+        /**
+         * Hàm đệ quy để render cây công việc với hệ thống đánh số phân cấp.
+         * @param {Array} tasks - Mảng các công việc cần render.
+         * @param {number} level - Cấp độ lồng nhau, dùng để thụt lề.
+         * @param {string} parentNumber - Số thứ tự của mục cha.
+         * @returns {string} - Chuỗi HTML của cây công việc.
+         */
+        function renderTaskTree(tasks, level, parentNumber) {
             if (!tasks || tasks.length === 0) {
                 return '';
             }
 
-            // *** THAY ĐỔI LOGIC ICON Ở ĐÂY: Dùng ký tự và căn chỉnh bằng Flexbox ***
-            const icons = [
-                // Cấp 0: Dấu gạch ngang
-                `<span class="w-5 h-5 flex items-center justify-center mr-1 text-lg font-semibold flex-shrink-0">-</span>`,
-                // Cấp 1: Dấu cộng
-                `<span class="w-5 h-5 flex items-center justify-center mr-1 text-lg font-semibold flex-shrink-0">+</span>`,
-                // Cấp 2 trở đi: Dấu chấm tròn
-                `<span class="w-5 h-5 flex items-center justify-center mr-1 text-lg font-semibold flex-shrink-0">•</span>`
-            ];
-            
             let html = '';
-            tasks.forEach(task => {
-                // Chọn icon dựa trên cấp độ, nếu cấp độ lớn hơn số icon có sẵn thì dùng icon cuối cùng
-                const taskIcon = icons[level] || icons[icons.length - 1];
-
-                const paddingLeft = level * 1.25; // 1.25rem = 20px
+            tasks.forEach((task, index) => {
                 const isParentTask = task.children && task.children.length > 0;
 
+                let currentNumber;
+                switch (level) {
+                    case 0: currentNumber = toRoman(index + 1); break;
+                    case 1: currentNumber = (index + 1).toString(); break;
+                    case 2: currentNumber = `${parentNumber}.${index + 1}`; break;
+                    case 3: currentNumber = toAlpha(index); break;
+                    default: currentNumber = `${parentNumber}.${index + 1}`; // Fallback
+                }
+
+                const taskNumberHtml = `<div class="w-10 text-left flex-shrink-0 font-semibold text-sm text-gray-500">${currentNumber}.</div>`;
+
+                let taskTitleHtml = '';
                 let commentsSectionHtml = '';
-                // Chỉ hiển thị phần comment nếu task không phải là task cha
-                if (!isParentTask) {
+
+                if (isParentTask) {
+                    taskTitleHtml = `<p class="text-sm font-semibold">${task.task_subject}</p>`;
+                    commentsSectionHtml = '';
+                } else {
+                    taskTitleHtml = `
+                        <p class="text-sm font-semibold">
+                            ${task.task_subject}
+                            <span class="font-normal text-gray-600">(${task.task_status})</span>
+                        </p>
+                    `;
+                    
                     const commentsHtml = task.comments.map(comment => {
                         const commentDate = new Date(comment.comment_time).toLocaleString('vi-VN', {
                             day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -161,24 +214,22 @@
                     }).join('');
 
                     commentsSectionHtml = `
-                        <div class="pl-6 mt-2 space-y-4">
+                        <div class="pl-10 mt-2 space-y-4">
                             ${commentsHtml.length > 0 ? commentsHtml : '<p class="text-sm text-gray-500 italic">Chưa có báo cáo.</p>'}
                         </div>
                     `;
                 }
 
                 html += `
-                    <div class="mt-4" style="padding-left: ${paddingLeft}rem;">
-                        <div class="flex items-center">
-                            ${taskIcon}
-                            <p class="text-sm font-semibold">
-                                ${task.task_subject}
-                                <span class="font-normal text-gray-600">(${task.task_status})</span>
-                            </p>
+                    <div class="mt-4">
+                        <div class="flex items-start" style="padding-left: ${level * 1.5}rem;">
+                            ${taskNumberHtml}
+                            <div class="flex-grow">${taskTitleHtml}</div>
                         </div>
-                        ${commentsSectionHtml}
-                        <!-- Gọi đệ quy để render các task con -->
-                        ${renderTaskTree(task.children, level + 1)}
+                        <div style="padding-left: ${level * 1.5}rem;">
+                            ${commentsSectionHtml}
+                        </div>
+                        ${renderTaskTree(task.children, level + 1, currentNumber)}
                     </div>
                 `;
             });
@@ -187,8 +238,8 @@
         }
 
         /**
-         * Hàm chính để render tất cả các báo cáo dự án
-         * @param {Array} projectsData - Mảng dữ liệu các dự án
+         * Hàm chính để render tất cả các báo cáo dự án.
+         * @param {Array} projectsData - Mảng dữ liệu các dự án.
          */
         function renderAllReports(projectsData) {
             const reportsContainer = document.getElementById('reports-container');
@@ -199,28 +250,25 @@
             });
 
             projectsData.forEach(project => {
-                // Tạo một "tờ giấy" cho mỗi dự án
                 const reportElement = document.createElement('div');
-                reportElement.className = 'report-paper bg-white p-8 sm:p-12';
+                reportElement.className = 'report-paper';
 
-                // Render header
                 const headerHtml = `
                     <div class="border-b border-gray-300 pb-4 mb-2">
-                        <h1 class="text-2xl font-bold text-gray-900">${project.project_name}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">${project.project_name}</h1>
                         <p class="text-sm text-gray-500 mt-1">Báo cáo tiến độ - Ngày ${today}</p>
                     </div>
                 `;
 
-                // Render cây công việc
-                const taskTreeHtml = renderTaskTree(project.tasks, 0);
+                const taskTreeHtml = renderTaskTree(project.tasks, 0, ''); // Initial call
 
                 reportElement.innerHTML = headerHtml + taskTreeHtml;
                 reportsContainer.appendChild(reportElement);
             });
         }
 
-         document.addEventListener('DOMContentLoaded', () => {
-            fetch('out/report2.json')
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('out/report3.json')
                 .then(response => response.ok ? response.json() : Promise.reject(response))
                 .then(data => renderAllReports(data))
                 .catch(error => {

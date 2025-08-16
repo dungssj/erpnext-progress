@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Công việc Cá nhân</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Google Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS tùy chỉnh cho giao diện báo cáo */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Nền trắng mặc định cho di động */
+            background-color: #ffffff;
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Khung chứa báo cáo */
+        .report-paper {
+            width: 100%;
+            background-color: #ffffff;
+            /* Lề cho di động */
+            padding: 1.5rem 1rem;
+        }
+
+        /* Áp dụng style "tờ giấy" cho màn hình lớn (desktop) */
+        @media (min-width: 768px) {
+            body {
+                /* Nền xám trên desktop để làm nổi bật tờ giấy */
+                background-color: #f3f4f6;
+            }
+            .report-paper {
+                max-width: 8.5in;
+                min-height: 11in;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin: 2rem auto;
+                padding: 3rem; /* Lề lớn hơn cho desktop */
+            }
+        }
+
+        /* Tùy chỉnh cho nội dung HTML từ comment */
+        .comment-content {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .comment-content p,
+        .comment-content ol,
+        .comment-content ul {
+            margin-bottom: 0.5rem;
+        }
+        .comment-content ol, .comment-content ul {
+            padding-left: 1.25rem;
+        }
+        .comment-content a {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .comment-content strong {
+            font-weight: 600;
+        }
+        .ql-editor.read-mode {
+            padding: 0;
+            font-size: inherit;
+            line-height: inherit;
+        }
+        .ql-ui { display: none; }
+
+        /* CSS cho việc in ấn */
+        @media print {
+            body {
+                background-color: #ffffff;
+            }
+            .report-paper {
+                box-shadow: none;
+                margin: 0 0 2rem 0;
+                max-width: 100%;
+                border: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container chính sẽ chứa một hoặc nhiều báo cáo -->
+    <div id="reports-container"></div>
+
+    <script>
+        // *** DỮ LIỆU JSON MẪU (để xem trước) ***
+        const reportData = [
+          {
+            "project_id": "FSM - PP - Hàng Tươi - Kamereo",
+            "project_name": "FSM - PP - Hàng Tươi - Kamereo",
+            "responsible_email": "hau.pham@f.com",
+            "tasks": [
+              { "task_id": "TASK-2025-00175", "task_subject": "Giấy ATVSTP các sản phẩm tươi", "task_status": "Completed", "is_group": false, "comments": [], "children": [] },
+              { "task_id": "TASK-2025-00180", "task_subject": "Giấy HACCP các sản phẩm tươi", "task_status": "Completed", "is_group": false, "comments": [{ "comment_time": "2025-08-14 15:43:30.784619", "comment_owner": "hau.pham@f.com", "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: HACCP Nấm\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d//view?usp=drive_link</p></div>\n\n" }], "children": [] },
+              { "task_id": "TASK-2025-00181", "task_subject": "Giấy ISO các sản phẩm tươi", "task_status": "Open", "is_group": false, "comments": [], "children": [] }
+            ]
+          },
+          {
+            "project_id": "FSM - XK - Nông sản chế biến - Pháp",
+            "project_name": "FSM - XK - Nông sản chế biến - Pháp",
+            "responsible_email": "hau.pham@f.com",
+            "tasks": [
+              { "task_id": "TASK-2025-00120", "task_subject": "Tìm nhà cung cấp hạt điều", "task_status": "Working", "is_group": false, "comments": [
+                  { "comment_time": "2025-08-14 15:24:23.570000", "comment_owner": "hau.pham@f.com", "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: BG Hạt Điều Rang Muối Quân Đạt\n</p></div><div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d//view?usp=sharing</p></div>" },
+                  { "comment_time": "2025-08-11 17:45:15.221044", "comment_owner": "hau.pham@f.com", "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Hạt điều rang muối\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Khách hàng đề xuất đóng gói hạt điều rang muối, bao gồm cả muối trong túi với tỉ lệ 300gr muối/kg hạt điều</p><p>Báo nhà máy xem phương án đề xuất quy cách đóng gói của khách hàng</p></div>\n\n<div><strong>Giải pháp đề xuất:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Trao đổi phía nhà máy sử dụng nguồi điều châu phi!</p></div>\n\n" },
+                  { "comment_time": "2025-08-08 16:56:21.233022", "comment_owner": "hau.pham@f.com", "comment_html": "<div class=\"ql-editor read-mode\"><p><strong>[TIẾN ĐỘ]</strong>: Cập nhật tiến độ</p><p>Nội dung chi tiết:</p><p>Làm việc cùng nhà cung cấp mới để cố giá cạnh tranh hơn cho KH yêu cầu</p><ol><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Intimex</li><li data-list=\"ordered\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Hạt điều Quân Đạt</li></ol><p>Hiện mức giá đang vượt target của KH, đang đàm phán lại NCC để xử lý giá!</p></div>" },
+                  { "comment_time": "2025-08-07 17:22:28.212795", "comment_owner": "hau.pham@f.com", "comment_html": "<div><p><strong>[VẤN ĐỀ]</strong>: Giá cao so với target giá KH\n </p></div>Nội dung chi tiết:\n<div class=\"ql-editor read-mode\"><p>Target giá khách hàng đang được báo:</p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>W240 5,42€/kg</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>W320 4,81€/kg</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Đàm phán với nhà cung cấp</li></ol></div>\n" }
+                ], "children": [] }
+            ]
+          },
+          {
+            "project_id": "project - test - 123",
+            "project_name": "project - test - 123",
+            "responsible_email": "hau.pham@f.com",
+            "tasks": [
+              { "task_id": "TASK-2025-00189", "task_subject": "sub-task - test - 123", "task_status": "Open", "is_group": false, "comments": [], "children": [] }
+            ]
+          }
+        ];
+
+        /**
+         * Hàm nhóm các dự án theo người chịu trách nhiệm (responsible_email).
+         * @param {Array} projectsData - Dữ liệu gốc của các dự án.
+         * @returns {Object} - Dữ liệu đã được nhóm theo responsible.
+         */
+        function groupProjectsByResponsible(projectsData) {
+            const responsibles = {};
+            projectsData.forEach(project => {
+                const responsible = project.responsible_email;
+                if (!responsible) return;
+
+                if (!responsibles[responsible]) {
+                    responsibles[responsible] = [];
+                }
+                responsibles[responsible].push(project);
+            });
+            return responsibles;
+        }
+        
+        /**
+         * Hàm đệ quy để render cây công việc cho một người cụ thể.
+         * @param {Array} tasks - Mảng các công việc cần render.
+         * @param {string} owner - Email của người đang xem báo cáo.
+         * @param {number} level - Cấp độ lồng nhau để thụt lề.
+         * @returns {string} - Chuỗi HTML của cây công việc.
+         */
+        function renderTaskTreeForPerson(tasks, owner, level) {
+            if (!tasks || tasks.length === 0) {
+                return '';
+            }
+            
+            const taskIcon = `<svg class="w-2 h-2 mr-3 text-gray-800 flex-shrink-0 mt-1.5" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="8"/></svg>`;
+            let html = '';
+
+            tasks.forEach(task => {
+                const paddingLeft = level * 1.5; // 1.5rem = 24px mỗi cấp
+                let commentsSectionHtml = '';
+
+                // Nếu là task cụ thể (không phải group), xử lý comment
+                if (!task.is_group) {
+                    const ownerComments = task.comments ? task.comments.filter(c => c.comment_owner === owner) : [];
+                    
+                    if (ownerComments.length > 0) {
+                        commentsSectionHtml = ownerComments.map(comment => {
+                            const commentDate = new Date(comment.comment_time).toLocaleString('vi-VN', {
+                                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                            });
+                            return `
+                                <div class="border-l-2 border-gray-200 pl-4">
+                                    <p class="text-xs text-gray-500">${comment.comment_owner} - ${commentDate}</p>
+                                    <div class="mt-1 comment-content">
+                                        ${comment.comment_html}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        commentsSectionHtml = `<p class="text-sm text-gray-500 italic">Chưa có báo cáo.</p>`;
+                    }
+                }
+
+                html += `
+                    <div class="mt-4" style="padding-left: ${paddingLeft}rem;">
+                        <div class="flex items-start">
+                            ${taskIcon}
+                            <p class="text-sm font-semibold flex-grow">
+                                ${task.task_subject}
+                                ${!task.is_group ? `<span class="font-normal text-gray-600">(${task.task_status})</span>` : ''}
+                            </p>
+                        </div>
+                        <div class="pl-5 mt-2 space-y-4">
+                            ${commentsSectionHtml}
+                        </div>
+                        <!-- Gọi đệ quy để render các task con -->
+                        ${renderTaskTreeForPerson(task.children || [], owner, level + 1)}
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        /**
+         * Hàm chính để render tất cả các báo cáo cá nhân.
+         * @param {Object} responsibleData - Dữ liệu đã được nhóm theo người chịu trách nhiệm.
+         */
+        function renderAllPersonalReports(responsibleData) {
+            const reportsContainer = document.getElementById('reports-container');
+            reportsContainer.innerHTML = ''; // Xóa nội dung cũ
+
+            const today = new Date().toLocaleDateString('vi-VN', {
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            });
+
+            for (const owner in responsibleData) {
+                const reportElement = document.createElement('div');
+                reportElement.className = 'report-paper';
+
+                const headerHtml = `
+                    <div class="border-b border-gray-300 pb-4 mb-4">
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">Báo cáo Công việc Cá nhân</h1>
+                        <p class="text-sm text-gray-600 mt-1">Nhân viên: <span class="font-semibold">${owner}</span></p>
+                        <p class="text-sm text-gray-500 mt-1">Ngày báo cáo: ${today}</p>
+                    </div>
+                `;
+
+                let projectsHtml = '';
+                const projects = responsibleData[owner];
+                projects.forEach(project => {
+                    projectsHtml += `
+                        <div class="mt-6">
+                            <h2 class="text-lg font-bold text-gray-800">${project.project_name}</h2>
+                            ${renderTaskTreeForPerson(project.tasks, owner, 0)}
+                        </div>
+                    `;
+                });
+
+                reportElement.innerHTML = headerHtml + projectsHtml;
+                reportsContainer.appendChild(reportElement);
+            }
+        }
+
+        // Chạy hàm render khi trang được tải xong
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- PHẦN LẤY DỮ LIỆU TỪ FILE JSON ---
+            // Bỏ comment đoạn code dưới đây và comment đoạn "PHẦN DÙNG DỮ LIỆU MẪU" để sử dụng dữ liệu từ file.
+            fetch('out/personal_report_by_responsible_quang_nguyen_fassmart_com_1755246503544.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const personalData = groupProjectsByResponsible(data);
+                    renderAllPersonalReports(personalData);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi tải file JSON:', error);
+                    // Hiển thị lỗi trên trang nếu cần
+                    document.getElementById('reports-container').innerHTML = 
+                        '<div class="report-paper"><p class="text-red-500 text-center">Không thể tải dữ liệu báo cáo. Vui lòng kiểm tra đường dẫn và file out/report3.json.</p></div>';
+                });
+            
+
+            // --- PHẦN DÙNG DỮ LIỆU MẪU (để xem trước) ---
+            // Comment đoạn code dưới đây nếu bạn muốn dùng dữ liệu từ file JSON.
+            // const personalData = groupProjectsByResponsible(reportData);
+            // renderAllPersonalReports(personalData);
+        });
+    </script>
+
+</body>
+</html>

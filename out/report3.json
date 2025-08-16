@@ -268,6 +268,83 @@
     ]
   },
   {
+    "project_id": "FSM - OEM - Phở khô ăn liền - Canada",
+    "project_name": "FSM - OEM - Phở khô ăn liền - Canada",
+    "project_status": "Open",
+    "project_company": "Công ty Cổ phần FASSMART",
+    "project_percent": 33.33,
+    "tasks": [
+      {
+        "task_id": "TASK-2025-00216",
+        "task_subject": "Khảo sát thị trường",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": [
+          {
+            "task_id": "TASK-2025-00048",
+            "task_subject": "Khảo sát thị trường đồ ăn nhanh tại Canada và Bắc Mỹ",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "task_id": "TASK-2025-00217",
+        "task_subject": "Đánh giá nhu cầu khách hàng",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": [
+          {
+            "task_id": "TASK-2025-00049",
+            "task_subject": "Tìm kiếm nhà máy sản xuất mỳ phở ăn liền",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "High",
+            "is_group": false,
+            "comments": [],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00219",
+            "task_subject": "Đánh giá chất lượng - Phở AL, QC",
+            "task_status": "Open",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "task_id": "TASK-2025-00050",
+        "task_subject": "Tìm hiểu thông tin công bố sản phẩm và thủ tục xuất khẩu mỳ phở ăn liền đi Canada",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Medium",
+        "is_group": true,
+        "comments": [
+          {
+            "comment_time": "2025-08-15 15:41:14.461396",
+            "comment_owner": "hau.pham@fassmart.com",
+            "comment_html": "<div><p><strong>[VẤN ĐỀ]</strong>: Thủ tục, giấy tờ nhập khẩu phở khô vào Canada</p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Nhà máy Uniben đề nghị cung cấp thôn tin, điều kiện chất lượng của sợi phở nhập khẩu vào Canada</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Phía Canada mong muốn sản phẩm phở khô OEM theo quy chuẩn của Oh Ricey từ bao bì, quy cách, kích thước tiêu chuẩn sản phẩm.</li></ol></div><div><strong>Giải pháp đề xuất:</strong></div><div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Đề xuất phía nhà máy đưa ra tiêu báo giá theo tiêu chuẩn khách hàng đã đưa ra để báo khách hàng đặt mẫu.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Báo giá chi tiết các điều kiện cho một công mẫu:</li><li data-list=\"ordered\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Giá theo quy cách sản phẩm của nhà máy đang làm</li><li data-list=\"ordered\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Số lượng/cont 20'' dự tính bao nhiêu?</li><li data-list=\"ordered\" class=\"ql-indent-1\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Quy chuẩn đóng goi sản phẩm/carton/cont?</li></ol></div>"
+          }
+        ],
+        "children": []
+      }
+    ]
+  },
+  {
     "project_id": "FSM - OEM - Vắt mỳ tôm sấy gió không chiên - HQ",
     "project_name": "FSM - OEM - Vắt mỳ tôm sấy gió không chiên - HQ",
     "project_status": "Open",
@@ -306,7 +383,13 @@
             "task_progress": 0,
             "task_priority": "Medium",
             "is_group": false,
-            "comments": [],
+            "comments": [
+              {
+                "comment_time": "2025-08-14 16:07:57.003434",
+                "comment_owner": "hau.pham@fassmart.com",
+                "comment_html": "<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/1Zccyp1hszglotT0J8tXeY3tu42TzwCpy/view?usp=sharing</p></div>"
+              }
+            ],
             "children": []
           }
         ]
@@ -314,11 +397,11 @@
     ]
   },
   {
-    "project_id": "FSM - Phân Phối - Ga Hà Nội",
-    "project_name": "FSM - Phân Phối - Ga Hà Nội",
+    "project_id": "FSM - PP - Ga Hà Nội",
+    "project_name": "FSM - PP - Ga Hà Nội",
     "project_status": "Open",
     "project_company": "Công ty Cổ phần FASSMART",
-    "project_percent": 35.29,
+    "project_percent": 42.42,
     "tasks": [
       {
         "task_id": "TASK-2025-00075",
@@ -363,7 +446,7 @@
               {
                 "task_id": "TASK-2025-00078",
                 "task_subject": "Logo Wrap & Go",
-                "task_status": "Pending Review",
+                "task_status": "Completed",
                 "task_progress": 100,
                 "task_priority": "Low",
                 "is_group": false,
@@ -616,11 +699,17 @@
               {
                 "task_id": "TASK-2025-00183",
                 "task_subject": "Làm - Bảng chi phí - Xe bán hàng",
-                "task_status": "Open",
-                "task_progress": 0,
+                "task_status": "Completed",
+                "task_progress": 100,
                 "task_priority": "Low",
                 "is_group": false,
-                "comments": [],
+                "comments": [
+                  {
+                    "comment_time": "2025-08-14 15:16:36.947656",
+                    "comment_owner": "thao.do@fassmart.com",
+                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Danh sách sản phẩm dự chi cho sales cart tại ga\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p><span style=\"background-color: rgb(255, 255, 255); font-size: 15px; color: rgb(8, 27, 58);\">Danh sách sản phẩm bao gồm: </span></p><p><span style=\"background-color: rgb(255, 255, 255); font-size: 15px; color: rgb(8, 27, 58);\">Bếp chiên gà (2.200.000 VND) </span></p><p><span style=\"background-color: rgb(255, 255, 255); font-size: 15px; color: rgb(8, 27, 58);\">Xe đẩy bán hàng (6.000.000 VND) </span></p><p><span style=\"background-color: rgb(255, 255, 255); font-size: 15px; color: rgb(8, 27, 58);\">Bộ dụng cụ đựng gia vị/thực phẩm (1.000.000 VND) </span></p><p><span style=\"background-color: rgb(255, 255, 255); font-size: 15px; color: rgb(8, 27, 58);\">TỔNG: 9.200.000 VND</span></p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://docs.google.com/spreadsheets/d/1j4KG7y-Z_QGKcnTWfyzjh-fMqF3-TOzssjcSFO05bik/edit?usp=sharing</p></div>"
+                  }
+                ],
                 "children": []
               }
             ]
@@ -637,27 +726,6 @@
               {
                 "task_id": "TASK-2025-00185",
                 "task_subject": "Làm - Báo cáo lãi lỗ dự kiến",
-                "task_status": "Open",
-                "task_progress": 0,
-                "task_priority": "Low",
-                "is_group": false,
-                "comments": [],
-                "children": []
-              }
-            ]
-          },
-          {
-            "task_id": "TASK-2025-00186",
-            "task_subject": "Nguồn gà vật liệu",
-            "task_status": "Open",
-            "task_progress": 0,
-            "task_priority": "Low",
-            "is_group": true,
-            "comments": [],
-            "children": [
-              {
-                "task_id": "TASK-2025-00187",
-                "task_subject": "Làm việc với anh Ong",
                 "task_status": "Open",
                 "task_progress": 0,
                 "task_priority": "Low",
@@ -741,20 +809,25 @@
                 "children": []
               },
               {
-                "task_id": "TASK-2025-00178",
-                "task_subject": "Soạn hợp đồng hàng nông sản khô",
-                "task_status": "Completed",
-                "task_progress": 100,
-                "task_priority": "Medium",
-                "is_group": false,
-                "comments": [
+                "task_id": "TASK-2025-00209",
+                "task_subject": "KD - Giao hàng",
+                "task_status": "Open",
+                "task_progress": 0,
+                "task_priority": "Low",
+                "is_group": true,
+                "comments": [],
+                "children": [
                   {
-                    "comment_time": "2025-08-13 17:33:25.728036",
-                    "comment_owner": "thanh.thai@fassmart.com",
-                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Bảng báo giá danh mục sản phẩm khô\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Bảng báo giá danh mục sản phẩm khô GHN - FSM </p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p><a href=\"https://docs.google.com/document/d/103KHm-ARcHECL4Rt9JdXr7GmhWTF1P2Z/edit\" rel=\"noopener noreferrer\">https://docs.google.com/document/d/103KHm-ARcHECL4Rt9JdXr7GmhWTF1P2Z/edit</a></p></div>"
+                    "task_id": "TASK-2025-00210",
+                    "task_subject": "Giao hàng - Nông sản khô - Ga HN",
+                    "task_status": "Open",
+                    "task_progress": 0,
+                    "task_priority": "Low",
+                    "is_group": false,
+                    "comments": [],
+                    "children": []
                   }
-                ],
-                "children": []
+                ]
               }
             ]
           }
@@ -772,8 +845,8 @@
           {
             "task_id": "TASK-2025-00068",
             "task_subject": "Viết hợp đồng kí gửi - GA HN",
-            "task_status": "Overdue",
-            "task_progress": 0,
+            "task_status": "Completed",
+            "task_progress": 100,
             "task_priority": "High",
             "is_group": false,
             "comments": [
@@ -790,8 +863,8 @@
     ]
   },
   {
-    "project_id": "FSM - Phân Phối - Hàng Tươi - Kamereo",
-    "project_name": "FSM - Phân Phối - Hàng Tươi - Kamereo",
+    "project_id": "FSM - PP - Hàng Tươi - Kamereo",
+    "project_name": "FSM - PP - Hàng Tươi - Kamereo",
     "project_status": "Open",
     "project_company": "Công ty Cổ phần FASSMART",
     "project_percent": 14.29,
@@ -895,7 +968,7 @@
               },
               {
                 "task_id": "TASK-2025-00173",
-                "task_subject": "Giấy ủy quyền Fsm cho chị Vân ký đại diện",
+                "task_subject": "Soạn - Giấy ủy quyền Fsm cho chị Vân",
                 "task_status": "Open",
                 "task_progress": 0,
                 "task_priority": "Low",
@@ -913,7 +986,7 @@
           },
           {
             "task_id": "TASK-2025-00171",
-            "task_subject": "Lập danh sách sản phẩm",
+            "task_subject": "Lập danh sách sản phẩm - hàng tươi",
             "task_status": "Open",
             "task_progress": 0,
             "task_priority": "Low",
@@ -947,7 +1020,13 @@
                 "task_progress": 100,
                 "task_priority": "High",
                 "is_group": false,
-                "comments": [],
+                "comments": [
+                  {
+                    "comment_time": "2025-08-14 15:43:30.784619",
+                    "comment_owner": "hau.pham@fassmart.com",
+                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: HACCP Nấm\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/1258_jIhYKeC_a5mOK96yAxrVSyPxfyr2/view?usp=drive_link</p></div>\n\n"
+                  }
+                ],
                 "children": []
               },
               {
@@ -1057,7 +1136,13 @@
             "task_progress": 100,
             "task_priority": "Low",
             "is_group": true,
-            "comments": [],
+            "comments": [
+              {
+                "comment_time": "2025-08-14 15:56:51.487213",
+                "comment_owner": "nhi.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Đã nhận thông số dừa yêu cầu từ khách\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Dừa gọt kim cương khắc logo MSC</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Nước dừa giữ được độ ngọt tự nhiên</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Cùi dừa dày vừa phải phải, trắng sáng đẹp tự nhiên</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Trọng lượng: 800gr - 1.2kg</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Packaging: Bọc màng nilon, bọc xốp, đóng thùng 9 quả có chia ngăn</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Bảo quản: 2-5 độ C, bảo quản ở nơi khô sạch sẽ, thoáng mát, tránh ánh mặt trời</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Bảo quả được 50-60 ngàu sau khi được sản xuất thành thành phẩm cuối</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Chứng nhận: Global GAP, HACCP</li></ol></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/1aXJpti-TCDdeB2fxYTK0kVOhy0poNmRg/view?usp=sharing</p></div>"
+              }
+            ],
             "children": [
               {
                 "task_id": "TASK-2025-00131",
@@ -1067,6 +1152,11 @@
                 "task_priority": "Low",
                 "is_group": false,
                 "comments": [
+                  {
+                    "comment_time": "2025-08-14 15:44:14.474431",
+                    "comment_owner": "nhi.nguyen@fassmart.com",
+                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Đã đàm phán và nhận giá từ khách\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Giá khách offer: FOB 0.77 EUR/trái </p></div>\n\n"
+                  },
                   {
                     "comment_time": "2025-08-08 10:56:42.580376",
                     "comment_owner": "nhi.nguyen@fassmart.com",
@@ -1106,6 +1196,11 @@
                 "is_group": false,
                 "comments": [
                   {
+                    "comment_time": "2025-08-14 15:58:45.690290",
+                    "comment_owner": "nhi.nguyen@fassmart.com",
+                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Đàm phán nâng giá\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Bác Lương đã thành công đàm phán nâng giá mua của FD lên 0.8 EUR/quả </p></div>\n\n"
+                  },
+                  {
                     "comment_time": "2025-08-08 11:07:17.867387",
                     "comment_owner": "nhi.nguyen@fassmart.com",
                     "comment_html": "<div class=\"ql-editor read-mode\"><p>Bác Lương đàm phán thành công nâng giá chào bán lên €0.80</p></div>"
@@ -1121,6 +1216,11 @@
                 "task_priority": "Low",
                 "is_group": false,
                 "comments": [
+                  {
+                    "comment_time": "2025-08-14 16:04:43.484937",
+                    "comment_owner": "nhi.nguyen@fassmart.com",
+                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Đàm phán mức giá 0.65 EUR/quả cho 2 cont\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>FD gửi phản hồi nói bên NCC khác đang offer bán dừa với mức giá 0.65 EUR</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Cô Vân đã tiến hành đàm phán để đi test 2 cont với giá 0.65 EUR </li></ol><p>(tuy nhiên cô cũng bảo đây cũng là mức giá cho 2 cont đầu, những cont sau đi mức giá sẽ phụ thuộc vào mức giá chung trên thị trường do đây là nông sản tươi)</p></div>\n\n"
+                  },
                   {
                     "comment_time": "2025-08-08 11:09:15.771783",
                     "comment_owner": "nhi.nguyen@fassmart.com",
@@ -1147,7 +1247,13 @@
                 "task_progress": 100,
                 "task_priority": "Low",
                 "is_group": false,
-                "comments": [],
+                "comments": [
+                  {
+                    "comment_time": "2025-08-14 16:15:18.600141",
+                    "comment_owner": "nhi.nguyen@fassmart.com",
+                    "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Đã nhận mẫu từ NCC\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Sau khi đi khảo sát nhà máy, đã chọn ra 2 NCC phù hợp, giá thành cạnh tranh </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Đã yêu cầu 2 nhà máy trên gửi mẫu</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Đã nhận mẫu và đóng hàng ký gửi về Hà Nội</li></ol></div>\n\n"
+                  }
+                ],
                 "children": []
               },
               {
@@ -1319,7 +1425,7 @@
     "project_name": "FSM - XK - Hóa Mỹ Phẩm - Pháp",
     "project_status": "Open",
     "project_company": "Công ty Cổ phần FASSMART",
-    "project_percent": 66.67,
+    "project_percent": 53.33,
     "tasks": [
       {
         "task_id": "TASK-2025-00043",
@@ -1433,6 +1539,79 @@
           }
         ],
         "children": []
+      },
+      {
+        "task_id": "TASK-2025-00211",
+        "task_subject": "TK - Thiết kế Mẫu Bao Bì",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      },
+      {
+        "task_id": "TASK-2025-00212",
+        "task_subject": "KD - Thông tin phản hồi KH",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      },
+      {
+        "task_id": "TASK-2025-00213",
+        "task_subject": "KD - Soạn thảo HĐ OEM nhà máy",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      },
+      {
+        "task_id": "TASK-2025-00214",
+        "task_subject": "KD - Chuẩn bị công bố hóa mỹ phẩm",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": [
+          {
+            "task_id": "TASK-2025-00215",
+            "task_subject": "KD - Bell: Báo giá & Thông tin CBSP",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-15 15:53:19.079748",
+                "comment_owner": "thanh.thai@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Chi phí và công bố của bên Bell </p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"color: rgb(8, 27, 58);\">Làm công bố riêng của sở thì mỗi sản phẩm là 1 bộ, chi phí công bố giá là 10 triệu cho 1 bộ. </span></li></ol><p><br></p><p><br></p></div>"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00218",
+            "task_subject": "KD - Hanasco: Tìm hiểu giấy tờ và chi phí công bố SP",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-15 16:02:03.728730",
+                "comment_owner": "thanh.thai@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Chi phí công bố sản phẩm mới cuẩ bên nhà máy Hanasco </p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Thời gian công bố 20- 25 ngày (tính từ ngày nộp đến lúc nhận kết quả).</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"color: rgb(8, 27, 58);\">Phí công bố 3 triệu/ sản phẩm + kiểm nghiệm 1,5 triệu/ sản phẩm. (Làm từ 5,000 đến 10,000 sản phẩm/ công thức thì được Free cả 2 cái này. )</span></li></ol><p><br></p></div>"
+              }
+            ],
+            "children": []
+          }
+        ]
       }
     ]
   },
@@ -1498,11 +1677,16 @@
           {
             "task_id": "TASK-2025-00120",
             "task_subject": "Tìm nhà cung cấp hạt điều",
-            "task_status": "Overdue",
+            "task_status": "Working",
             "task_progress": 0,
             "task_priority": "High",
             "is_group": false,
             "comments": [
+              {
+                "comment_time": "2025-08-14 15:24:23.570000",
+                "comment_owner": "hau.pham@fassmart.com",
+                "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: BG Hạt Điều Rang Muối Quân Đạt\n</p></div><div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/1KW1TUnvBUu0LdVPpgk3CAb8CLZmEuvwr/view?usp=sharing</p></div>"
+              },
               {
                 "comment_time": "2025-08-11 17:45:15.221044",
                 "comment_owner": "hau.pham@fassmart.com",
@@ -1647,12 +1831,17 @@
         "children": [
           {
             "task_id": "TASK-2025-00069",
-            "task_subject": "Tìm nhà cung cấp giấy Kraft",
+            "task_subject": "Tìm kiếm - nhà cung cấp giấy Kraft",
             "task_status": "Working",
             "task_progress": 100,
             "task_priority": "High",
             "is_group": false,
             "comments": [
+              {
+                "comment_time": "2025-08-15 11:01:30.858885",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Hỏi lại về chất lượng sản phẩm</p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><p>FD đã có feedback về chất lượng sản phẩm, cần hỏi lại các nhà cung cấp về chất lượng sản phẩm và đàm phán lại giá</p></div>"
+              },
               {
                 "comment_time": "2025-08-12 10:24:30.781615",
                 "comment_owner": "quang.nguyen@fassmart.com",
@@ -1673,7 +1862,7 @@
           },
           {
             "task_id": "TASK-2025-00070",
-            "task_subject": "Tìm nhà cung cấp giấy Tissue",
+            "task_subject": "Tìm kiếm - nhà cung cấp giấy Tissue",
             "task_status": "Working",
             "task_progress": 100,
             "task_priority": "High",
@@ -1683,12 +1872,17 @@
           },
           {
             "task_id": "TASK-2025-00148",
-            "task_subject": "Nhà cung cấp hộp bằng nhựa",
+            "task_subject": "Tìm kiếm - nhà cung cấp hộp bằng nhựa",
             "task_status": "Working",
             "task_progress": 0,
             "task_priority": "Medium",
             "is_group": false,
             "comments": [
+              {
+                "comment_time": "2025-08-15 15:23:35.431989",
+                "comment_owner": "hau.pham@fassmart.com",
+                "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Đánh giá sản phẩm mẫu của FSM</p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><p><span style=\"background-color: rgb(255, 255, 255); font-size: 14px; color: rgb(56, 56, 56);\">FDL đã nhận sản phẩm mẫu, đang tiến hành đánh giá sản phẩm do FSM cấp với sản phẩm FDL đang cung cấp.</span></p><p><span style=\"background-color: rgb(255, 255, 255); font-size: 14px; color: rgb(56, 56, 56);\">FSM cập nhật bảng thông tin sản phẩm để FDL đưa ra các thông số của sản phẩm cho FSM &nbsp;làm việc với nhà máy cải tiến chất lượng</span></p><p><br></p></div><div><strong>Tham chiếu:</strong></div><div class=\"ql-editor read-mode\"><p>https://docs.google.com/spreadsheets/d/1lbRO6dnVbGukwWkvOWPFnVZ13zsLOwSj/edit?usp=sharing&amp;ouid=116909208333271741966&amp;rtpof=true&amp;sd=true</p></div>"
+              },
               {
                 "comment_time": "2025-08-08 16:51:23.254001",
                 "comment_owner": "hau.pham@fassmart.com",
@@ -1699,12 +1893,17 @@
           },
           {
             "task_id": "TASK-2025-00149",
-            "task_subject": "Tìm nhà cung cấp đồ đựng vệ sinh",
+            "task_subject": "Tìm kiếm - nhà cung cấp đồ đựng vệ sinh",
             "task_status": "Working",
             "task_progress": 0,
             "task_priority": "Medium",
             "is_group": false,
             "comments": [
+              {
+                "comment_time": "2025-08-15 15:22:09.449933",
+                "comment_owner": "hau.pham@fassmart.com",
+                "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Cập nhật thông tin sản phẩm</p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><p>FDL đã nhận sản phẩm mẫu, đang tiến hành đánh giá sản phẩm do FSM cấp với sản phẩm FDL đang cung cấp.</p><p>FSM cập nhật bảng thông tin sản phẩm để FDL đưa ra các thông số của sản phẩm cho FSM &nbsp;làm việc với nhà máy cải tiến chất lượng</p></div><div><strong>Tham chiếu:</strong></div><div class=\"ql-editor read-mode\"><p><a href=\"https://docs.google.com/spreadsheets/d/1lbRO6dnVbGukwWkvOWPFnVZ13zsLOwSj/edit?usp=sharing&amp;ouid=116909208333271741966&amp;rtpof=true&amp;sd=true\" rel=\"noopener noreferrer\">https://docs.google.com/spreadsheets/d/1lbRO6dnVbGukwWkvOWPFnVZ13zsLOwSj/edit?usp=sharing&amp;ouid=116909208333271741966&amp;rtpof=true&amp;sd=true</a></p></div>"
+              },
               {
                 "comment_time": "2025-08-08 16:49:48.347728",
                 "comment_owner": "hau.pham@fassmart.com",

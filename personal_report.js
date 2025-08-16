@@ -23,7 +23,6 @@ function stripHtml(html = '') {
 }
 
 function sanitizeHtml(html = '') {
-  // Giữ layout; bỏ script/style để render HTML an toàn
   return (html || '')
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
@@ -42,33 +41,46 @@ function addOneDay(dateStr) {
 }
 
 function parseArgs(argv) {
-  // ví dụ: --project=PROJ-0019 --company="Công ty F" --from=2025-08-01 --to=2025-08-08 --status=Open,Completed --leaf --latest --kw="gửi hàng"
+  // Ví dụ:
+  // node personal_report.js --email=nhi.nguyen@ --company="Công ty F" --from=2025-08-01 --to=2025-08-08 --status=Open,Completed --leaf --latest --kw="mẫu"
   const f = {}
   argv.forEach((a) => {
     const [kRaw, ...rest] = a.replace(/^--/, '').split('=')
     const k = kRaw.trim()
     const v = rest.join('=')
     switch (k) {
+      case 'email':     f.email = v?.trim(); break
       case 'from':
       case 'from_date': f.from_date = v; break
       case 'to':
       case 'to_date':   f.to_date = v; break
       case 'project':   f.project = v; break
       case 'company':   f.company = v; break
-      case 'owner':
-      case 'comment_owner': f.comment_owner = v; break
       case 'kw':
       case 'keyword':   f.keyword = v; break
       case 'status':
       case 'task_status': f.task_status = v ? v.split(',').map(s => s.trim()).filter(Boolean) : undefined; break
-      case 'leaf':      f.leaf_only = true; break   // nếu muốn chỉ lá, bật cờ này
-      case 'latest':    f.latest_only = true; break // nếu muốn mỗi task 1 comment mới nhất
+      case 'leaf':      f.leaf_only = true; break
+      case 'latest':    f.latest_only = true; break
     }
   })
+  if (!f.email) throw new Error('Thiếu --email (ví dụ: --email=nhi.nguyen@abc.com)')
   if (f.leaf_only === undefined) f.leaf_only = false
   if (f.latest_only === undefined) f.latest_only = false
   if (!f.task_status) f.task_status = ['Open','Working','Completed','Overdue','Pending Review']
   return f
+}
+
+function emailInJsonList(raw, email) {
+  if (!raw) return false
+  try {
+    // raw có thể là string JSON hoặc object/array (tuỳ site)
+    const arr = typeof raw === 'string' ? JSON.parse(raw) : raw
+    if (!Array.isArray(arr)) return false
+    return arr.map(x => String(x).trim().toLowerCase()).includes(email.trim().toLowerCase())
+  } catch {
+    return false
+  }
 }
 
 /* ========= Core ========= */
@@ -87,41 +99,7 @@ async function main(filters) {
   })
   const db = app.db()
 
-  /* 1) LẤY COMMENT TRƯỚC (comment_type = 'Comment', reference_doctype = 'Task') */
-  const commentFilters = [
-    ['reference_doctype', '=', 'Task'],
-    ['comment_type', '=', 'Comment'],
-  ]
-  if (filters.from_date) commentFilters.push(['creation', '>=', filters.from_date])
-  if (filters.to_date)   commentFilters.push(['creation', '<', addOneDay(filters.to_date)])
-  if (filters.comment_owner) commentFilters.push(['owner', '=', filters.comment_owner])
-
-  let comments = await db.getDocList('Comment', {
-    fields: ['name','creation','owner','comment_type','content','reference_name'],
-    filters: commentFilters,
-    orderBy: { field: 'creation', order: 'asc' },
-    limit: 10000,
-  })
-  comments = comments.filter(c => String(c.comment_type || '').toLowerCase() === 'comment')
-
-  /* 2) LẤY TASK cho các comment (để biết project phát sinh từ comment) */
-  const taskMap = {}
-  const commentTaskNames = [...new Set(comments.map(c => c.reference_name).filter(Boolean))]
-  if (commentTaskNames.length) {
-    for (const part of chunk(commentTaskNames)) {
-      const partTasks = await db.getDocList('Task', {
-        fields: ['name','subject','status','progress','priority','is_group','project','parent_task','lft','rgt'],
-        filters: [['name','in', part]],
-        limit: part.length,
-      })
-      for (const t of partTasks) taskMap[t.name] = t
-    }
-  }
-
-  // Loại orphan sớm
-  let filteredComments = comments.filter(c => taskMap[c.reference_name])
-
-  /* 3) XÁC ĐỊNH PROJECT MỤC TIÊU & NẠP PROJECT */
+  /* 1) Xác định tập Project theo --project/--company (nếu có) */
   const projectMap = {}
   const targetProjectIdSet = new Set()
 
@@ -139,17 +117,61 @@ async function main(filters) {
     }
   }
 
-  for (const c of filteredComments) {
-    const pid = taskMap[c.reference_name]?.project
-    if (pid) targetProjectIdSet.add(pid)
+  /* 2) LẤY TẤT CẢ TASK người này phụ trách (dựa vào custom_nguoi_phu_trach) */
+  const taskFilters = []
+  if (targetProjectIdSet.size) {
+    taskFilters.push(['project', 'in', [...targetProjectIdSet]])
+  }
+  // lọc sơ bộ bằng LIKE để giảm tải, xác thực kỹ bằng parse JSON bên dưới
+  taskFilters.push(['custom_nguoi_phu_trach', 'like', `%${filters.email}%`])
+
+  let allTasks = []
+  // phân trang theo project-chunk để an toàn
+  for (const part of chunk(taskFilters.find(f => f[0]==='project') ? [...targetProjectIdSet] : [null], 50)) {
+    const filtersForCall = taskFilters.slice()
+    if (part[0] !== null) {
+      // thay thế 'project in' theo part
+      filtersForCall.splice(0, filtersForCall.length,
+        ['project','in', part],
+        ['custom_nguoi_phu_trach', 'like', `%${filters.email}%`]
+      )
+    }
+    const batch = await db.getDocList('Task', {
+      fields: ['name','subject','status','progress','priority','is_group','project','parent_task','lft','rgt','custom_nguoi_phu_trach'],
+      filters: filtersForCall,
+      limit: 10000
+    })
+    allTasks = allTasks.concat(batch)
   }
 
-  const projectIds = [...targetProjectIdSet]
-  if (!projectIds.length) {
-    console.log('Không xác định được Project mục tiêu (không có comment và không truyền --project/--company).')
+  // Nếu không truyền project/company → query một phát
+  if (!allTasks.length && !targetProjectIdSet.size) {
+    allTasks = await db.getDocList('Task', {
+      fields: ['name','subject','status','progress','priority','is_group','project','parent_task','lft','rgt','custom_nguoi_phu_trach'],
+      filters: [['custom_nguoi_phu_trach', 'like', `%${filters.email}%`]],
+      limit: 10000
+    })
+  }
+
+  // Xác thực đúng email ∈ custom_nguoi_phu_trach (JSON)
+  allTasks = allTasks.filter(t => emailInJsonList(t.custom_nguoi_phu_trach, filters.email))
+
+  // Áp filter status / leaf_only nếu có
+  if (filters.task_status?.length) {
+    const set = new Set(filters.task_status.map(s => s.toLowerCase()))
+    allTasks = allTasks.filter(t => set.has(String(t.status || '').toLowerCase()))
+  }
+  if (filters.leaf_only) {
+    allTasks = allTasks.filter(t => !Number(t.is_group || 0))
+  }
+
+  if (!allTasks.length) {
+    console.log(`Không có task nào mà ${filters.email} phụ trách theo filter hiện tại.`)
     process.exit(0)
   }
 
+  // Bổ sung projectIds từ tasks (đồng thời nạp projectMap còn thiếu)
+  const projectIds = [...new Set(allTasks.map(t => t.project).filter(Boolean))]
   const missingProjects = projectIds.filter(pid => !projectMap[pid])
   if (missingProjects.length) {
     for (const part of chunk(missingProjects)) {
@@ -161,37 +183,36 @@ async function main(filters) {
       for (const p of partProjects) projectMap[p.name] = p
     }
   }
+  // Nếu có filter company mà chưa dùng từ đầu, lọc lại tasks theo company của project
+  if (filters.company) {
+    allTasks = allTasks.filter(t => (projectMap[t.project]?.company || '') === filters.company)
+  }
 
-  // Giới hạn comment về các project mục tiêu
-  filteredComments = filteredComments.filter(c => {
-    const pid = taskMap[c.reference_name]?.project
-    return pid && targetProjectIdSet.has(pid)
-  })
+  /* 3) LẤY COMMENT của những Task đã lọc (không giới hạn người viết) */
+  const taskNames = [...new Set(allTasks.map(t => t.name))]
+  let filteredComments = []
+  for (const part of chunk(taskNames, 400)) {
+    const commentFilters = [
+      ['reference_doctype', '=', 'Task'],
+      ['reference_name', 'in', part],
+      ['comment_type', '=', 'Comment'],
+      ['comment_email', '=', filters.email] 
+    ]
+    if (filters.from_date) commentFilters.push(['creation', '>=', filters.from_date])
+    if (filters.to_date)   commentFilters.push(['creation', '<', addOneDay(filters.to_date)])
 
-  /* 4) LẤY TẤT CẢ TASK CỦA PROJECT MỤC TIÊU (kể cả không có comment) */
-  let allTasks = []
-  for (const part of chunk(projectIds, 50)) {
-    const partTasks = await db.getDocList('Task', {
-      fields: ['name','subject','status','progress','priority','is_group','project','parent_task','lft','rgt'],
-      filters: [['project','in', part]],
-      limit: 10000
+    const batch = await db.getDocList('Comment', {
+      fields: ['name','creation','owner','comment_type','content','reference_name'],
+      filters: commentFilters,
+      orderBy: { field: 'creation', order: 'asc' },
+      limit: 10000,
     })
-    allTasks = allTasks.concat(partTasks)
+    filteredComments = filteredComments.concat(
+      batch.filter(c => String(c.comment_type || '').toLowerCase() === 'comment')
+    )
   }
 
-  // Áp filter status / leaf_only lên TASK (nếu có)
-  if (filters.task_status && filters.task_status.length) {
-    const set = new Set(filters.task_status.map(s => s.toLowerCase()))
-    allTasks = allTasks.filter(t => set.has(String(t.status || '').toLowerCase()))
-  }
-  if (filters.leaf_only) {
-    allTasks = allTasks.filter(t => !Number(t.is_group || 0))
-  }
-
-  // Cập nhật taskMap để chứa cả task không có comment
-  for (const t of allTasks) taskMap[t.name] = t
-
-  /* 5) Áp filter keyword trên COMMENT (task giữ nguyên) */
+  // Lọc keyword (nếu có) trên nội dung comment (text thuần)
   if (filters.keyword) {
     const kw = filters.keyword.toLowerCase()
     filteredComments = filteredComments.filter(c => stripHtml(c.content).toLowerCase().includes(kw))
@@ -207,7 +228,7 @@ async function main(filters) {
     filteredComments = Object.values(latest)
   }
 
-  /* 6) GOM COMMENT THEO TASK */
+  /* 4) Gom comment theo Task */
   const commentsByTask = new Map()
   for (const c of filteredComments) {
     const arr = commentsByTask.get(c.reference_name) || []
@@ -215,8 +236,7 @@ async function main(filters) {
     commentsByTask.set(c.reference_name, arr)
   }
 
-  /* 7) XÂY CÂY TASK CHA–CON TRONG MỖI PROJECT */
-  // a) Group task theo project
+  /* 5) Build cây Task cha–con trong từng Project */
   const tasksByProject = new Map()
   for (const t of allTasks) {
     const arr = tasksByProject.get(t.project) || []
@@ -224,21 +244,16 @@ async function main(filters) {
     tasksByProject.set(t.project, arr)
   }
 
-  // b) Với mỗi project: build map node, link children theo parent_task
   function sortTasksForProject(list) {
-    // Ưu tiên sort theo lft nếu có, fallback subject
     const hasTree = list.some(t => typeof t.lft === 'number' && t.lft !== null)
-    if (hasTree) {
-      return list.slice().sort((a, b) => (a.lft ?? 0) - (b.lft ?? 0))
-    }
+    if (hasTree) return list.slice().sort((a, b) => (a.lft ?? 0) - (b.lft ?? 0))
     return list.slice().sort((a, b) => (a.subject || '').localeCompare(b.subject || ''))
   }
 
   function buildTaskTreeForProject(taskList) {
-    const nodes = new Map() // name -> node
-    const childrenMap = new Map() // parent -> [child nodes]
+    const nodes = new Map()
+    const childrenMap = new Map()
 
-    // Tạo node rỗng ban đầu
     for (const t of taskList) {
       nodes.set(t.name, {
         task_id: t.name,
@@ -247,25 +262,23 @@ async function main(filters) {
         task_progress: t.progress ?? null,
         task_priority: t.priority ?? null,
         is_group: !!Number(t.is_group || 0),
-        comments: [],   // sẽ gắn ngay dưới
-        children: [],   // sẽ gắn sau
+        comments: [],
+        children: [],
       })
     }
 
-    // Gắn comment vào đúng node
     for (const t of taskList) {
       const node = nodes.get(t.name)
-      const cmts = (commentsByTask.get(t.name) || []).slice()
-        .sort((a, b) => b.creation.localeCompare(a.creation))
+      const cmts = (commentsByTask.get(t.name) || [])
+        .slice()
+        .sort((a, b) => b.creation.localeCompare(a.creation)) // mới nhất lên đầu
       node.comments = cmts.map(c => ({
         comment_time: c.creation,
         comment_owner: c.owner,
         comment_html: sanitizeHtml(c.content),
-        // comment_plain: stripHtml(c.content), // nếu muốn thêm text
       }))
     }
 
-    // Lập map children theo parent_task
     for (const t of taskList) {
       const parent = t.parent_task
       if (parent && nodes.has(parent)) {
@@ -275,17 +288,15 @@ async function main(filters) {
       }
     }
 
-    // Điền children vào node cha
     for (const [p, kids] of childrenMap.entries()) {
       const parentNode = nodes.get(p)
-      // sắp xếp children theo lft/subject như hàm sort
       const orderedKids = sortTasksForProject(
         kids.map(k => ({ ...taskList.find(t => t.name === k.task_id), __node: k }))
       ).map(x => x.__node)
       parentNode.children = orderedKids
+      if (orderedKids.length > 0) parentNode.is_group = true
     }
 
-    // Xác định roots: task không có parent_task hoặc parent không thuộc cùng project/filter
     const taskNameSet = new Set(taskList.map(t => t.name))
     const roots = []
     for (const t of taskList) {
@@ -293,7 +304,6 @@ async function main(filters) {
       if (isRoot) roots.push(nodes.get(t.name))
     }
 
-    // Sort root nodes giống quy tắc
     const orderedRoots = sortTasksForProject(
       roots.map(r => ({ ...taskList.find(t => t.name === r.task_id), __node: r }))
     ).map(x => x.__node)
@@ -301,7 +311,7 @@ async function main(filters) {
     return orderedRoots
   }
 
-  /* 8) GHÉP PROJECT → TASK TREE */
+  /* 6) GHÉP Project → Task Tree */
   const sortedProjectIds = [...tasksByProject.keys()].sort((a, b) => {
     const pa = (projectMap[a] || {}).project_name || ''
     const pb = (projectMap[b] || {}).project_name || ''
@@ -320,16 +330,18 @@ async function main(filters) {
       project_status: p.status,
       project_company: p.company,
       project_percent: p.percent_complete ?? null,
-      tasks: taskTree, // cây cha–con
+      responsible_email: filters.email,
+      tasks: taskTree,
     })
   }
 
-  /* 9) Xuất JSON */
+  /* 7) Xuất JSON */
   const outDir = path.resolve(__dirname, 'out')
   if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })
-  const jsonOut = path.join(outDir, `progress_tree_${Date.now()}.json`)
+  const safeEmail = filters.email.replace(/[^a-zA-Z0-9]/g,'_')
+  const jsonOut = path.join(outDir, `personal_report_by_responsible_${safeEmail}_${Date.now()}.json`)
   fs.writeFileSync(jsonOut, JSON.stringify(tree, null, 2), 'utf8')
-  console.log(`✔ Đã xuất JSON: ${jsonOut}`)
+  console.log(`✔ Đã xuất JSON cá nhân (theo phụ trách): ${jsonOut}`)
 }
 
 /* ========= Run ========= */

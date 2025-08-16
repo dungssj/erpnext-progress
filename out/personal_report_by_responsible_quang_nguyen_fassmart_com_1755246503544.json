@@ -1,0 +1,353 @@
+[
+  {
+    "project_id": "FSM - NK - Băng Vệ Sinh - Hàn Quốc",
+    "project_name": "FSM - NK - Băng Vệ Sinh - Hàn Quốc",
+    "project_status": "Open",
+    "project_company": "Công ty Cổ phần FASSMART",
+    "project_percent": 33.33,
+    "responsible_email": "quang.nguyen@fassmart.com",
+    "tasks": [
+      {
+        "task_id": "TASK-2025-00190",
+        "task_subject": "Hàng Hóa",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": [
+          {
+            "task_id": "TASK-2025-00193",
+            "task_subject": "Đàm phán giá",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 11:48:38.774426",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Bảng giá\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đã có bảng báo giá cho đợt hàng nhập đầu tiên để thử thị trường Việt Nam</p><p>Link: <a href=\"https://drive.google.com/file/d/15NkuTHLQbfavT-aZCbpExjxAtcNazsb7/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/15NkuTHLQbfavT-aZCbpExjxAtcNazsb7/view?usp=drive_link</a></p><p><br></p></div>\n\n"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00194",
+            "task_subject": "Kiểm nghiệm sản phẩm",
+            "task_status": "Working",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 11:54:00.209540",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Chi phí kiểm nghiệm\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>ĐÃ có bảng báo giá chi phí kiểm nghiệm, bảng giá này sẽ bao gồm cả của hàng Trung và hàng Hàn. Chi phí kiểm nghiệm sẽ được nhà cung cấp hỗ trợ toàn bộ, công ty mình sẽ chi trả trước rồi khi nhập hàng chính thức, nhà cung cấp sẽ trừ vào chi phí nhập.</p><p>Link bảng giá: <a href=\"https://drive.google.com/file/d/1CWUCwqYBb0XUgize-3N2o9kYCZsPZN4M/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1CWUCwqYBb0XUgize-3N2o9kYCZsPZN4M/view?usp=drive_link</a></p><p><br></p></div>\n\n"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00195",
+            "task_subject": "Giấy tờ của sản phẩm được cập nhật bởi nhà cung cấp",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:01:45.324669",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Giấy tờ sản phẩm và xưởng sản xuất\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đã có</p><p>Link: <a href=\"https://drive.google.com/file/d/1YzHYvYx4-u0onJVgkz2j7cFSjMujSR8M/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1YzHYvYx4-u0onJVgkz2j7cFSjMujSR8M/view?usp=drive_link</a></p><p><br></p></div>\n\n"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00197",
+            "task_subject": "Công bố sản phẩm",
+            "task_status": "Open",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00196",
+            "task_subject": "Thông tin sản phẩm",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:04:16.612501",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Catalogue\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/1_rSTX1ozGXtV5sbSq5W90dRJJDIYqfhc/view?usp=drive_link</p></div>\n\n"
+              }
+            ],
+            "children": []
+          }
+        ]
+      },
+      {
+        "task_id": "TASK-2025-00191",
+        "task_subject": "Vận chuyển",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [
+          {
+            "comment_time": "2025-08-14 11:50:20.301549",
+            "comment_owner": "quang.nguyen@fassmart.com",
+            "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Liên hệ công ty logistics\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đang liên hệ với các công ty vận chuyển để xin bảng giá</p></div>\n\n"
+          }
+        ],
+        "children": [
+          {
+            "task_id": "TASK-2025-00206",
+            "task_subject": "Liên hệ công ty logistics",
+            "task_status": "Open",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "task_id": "TASK-2025-00192",
+        "task_subject": "Phân phối",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": []
+      }
+    ]
+  },
+  {
+    "project_id": "FSM - NK - Băng Vệ Sinh - TQ",
+    "project_name": "FSM - NK - Băng Vệ Sinh - TQ",
+    "project_status": "Open",
+    "project_company": "Công ty Cổ phần FASSMART",
+    "project_percent": 33.33,
+    "responsible_email": "quang.nguyen@fassmart.com",
+    "tasks": [
+      {
+        "task_id": "TASK-2025-00198",
+        "task_subject": "Hàng hóa",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": [
+          {
+            "task_id": "TASK-2025-00202",
+            "task_subject": "Kiểm nghiệm sản phẩm",
+            "task_status": "Working",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:15:17.664125",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Báo giá\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p><span style=\"background-color: rgb(255, 255, 255); font-size: 14px; color: rgb(56, 56, 56);\">Đã có báo giá chung của hàng Trung và Hàn</span></p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p><a href=\"https://drive.google.com/file/d/1CWUCwqYBb0XUgize-3N2o9kYCZsPZN4M/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1CWUCwqYBb0XUgize-3N2o9kYCZsPZN4M/view?usp=drive_link</a></p><p><br></p></div>"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00201",
+            "task_subject": "Đàm phán giá",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:11:51.158340",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Bảng báo giá\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đã có bảng giá</p><p><br></p></div>\n\n<div><strong>Giải pháp đề xuất:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/15NkuTHLQbfavT-aZCbpExjxAtcNazsb7/view?usp=drive_link</p></div>\n\n"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00204",
+            "task_subject": "Thông tin sản phẩm",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:19:00.541437",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Catalogue\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đã có thông tin sản phẩm</p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://drive.google.com/file/d/12HQqAcPu9LPZit4DLcy4yl6o3q0SgElc/view?usp=drive_link</p></div>"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00203",
+            "task_subject": "Giấy tờ sản phẩm được cập nhật bởi nhà cung cấp",
+            "task_status": "Completed",
+            "task_progress": 100,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:18:17.181160",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Giấy tờ sản phẩm\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>ĐÃ có giấy tờ nhà cung cấp đưa</p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p><a href=\"https://drive.google.com/file/d/1IQcNNngZ76yLdC4tugPisKVlcx1R5mTb/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1IQcNNngZ76yLdC4tugPisKVlcx1R5mTb/view?usp=drive_link</a></p><p><a href=\"https://drive.google.com/file/d/1EUuvAB5QpR3tESQP3QXW8goqeM8oGnOt/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1EUuvAB5QpR3tESQP3QXW8goqeM8oGnOt/view?usp=drive_link</a></p><p><a href=\"https://drive.google.com/file/d/1TTvF2DaVSitHP5OQU56iaXCm5pCTHrQd/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1TTvF2DaVSitHP5OQU56iaXCm5pCTHrQd/view?usp=drive_link</a></p><p><a href=\"https://drive.google.com/file/d/1T_DKmUlergk61ELeOCFi6CcaXpbp-VHu/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/1T_DKmUlergk61ELeOCFi6CcaXpbp-VHu/view?usp=drive_link</a></p><p><br></p></div>"
+              }
+            ],
+            "children": []
+          },
+          {
+            "task_id": "TASK-2025-00205",
+            "task_subject": "Công bố sản phẩm",
+            "task_status": "Open",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "task_id": "TASK-2025-00199",
+        "task_subject": "Vận chuyển",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [
+          {
+            "comment_time": "2025-08-14 12:20:48.912269",
+            "comment_owner": "quang.nguyen@fassmart.com",
+            "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Liên hệ logistics\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đã có bảng báo giá của 2 công ty ASAP và Gatelink, khuyến khích có thể liên hệ với Gatelink vì họ sẽ hỗ trợ nhiều hơn</p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p><a href=\"https://docs.google.com/spreadsheets/d/1bG3Gjl7boodR-WpvHk9AkJNDHl_kO2KH/edit?ouid=111207187639076936346&amp;rtpof=true&amp;sd=true&amp;usp=drive_link\" rel=\"noopener noreferrer\">https://docs.google.com/spreadsheets/d/1bG3Gjl7boodR-WpvHk9AkJNDHl_kO2KH/edit?usp=drive_link&amp;ouid=111207187639076936346&amp;rtpof=true&amp;sd=true</a></p><p><a href=\"https://drive.google.com/file/d/11JhxYIlBseD2olqoXnlD_O50MhjNgs9T/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/11JhxYIlBseD2olqoXnlD_O50MhjNgs9T/view?usp=drive_link</a></p><p><br></p></div>"
+          }
+        ],
+        "children": [
+          {
+            "task_id": "TASK-2025-00207",
+            "task_subject": "Liên hệ công ty logistics",
+            "task_status": "Working",
+            "task_progress": 0,
+            "task_priority": "Low",
+            "is_group": false,
+            "comments": [
+              {
+                "comment_time": "2025-08-14 12:28:57.362203",
+                "comment_owner": "quang.nguyen@fassmart.com",
+                "comment_html": "<div><p><strong>[HOÀN THÀNH]</strong>: Bảng báo giá\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p><span style=\"background-color: rgb(255, 255, 255); font-size: 14px; color: rgb(56, 56, 56);\">Đã có bảng báo giá của 2 công ty ASAP và Gatelink, khuyến khích có thể liên hệ với Gatelink vì họ sẽ hỗ trợ nhiều hơn và có thể cung cấp thêm các nhà cung cấp ở Trung Quốc trong tương lai</span></p></div>\n\n<div><strong>Tham chiếu:</strong></div>\n<div class=\"ql-editor read-mode\"><p><a href=\"https://drive.google.com/file/d/11JhxYIlBseD2olqoXnlD_O50MhjNgs9T/view?usp=drive_link\" rel=\"noopener noreferrer\">https://drive.google.com/file/d/11JhxYIlBseD2olqoXnlD_O50MhjNgs9T/view?usp=drive_link</a></p><p><a href=\"https://docs.google.com/spreadsheets/d/1bG3Gjl7boodR-WpvHk9AkJNDHl_kO2KH/edit?ouid=111207187639076936346&amp;rtpof=true&amp;sd=true&amp;usp=drive_link\" rel=\"noopener noreferrer\">https://docs.google.com/spreadsheets/d/1bG3Gjl7boodR-WpvHk9AkJNDHl_kO2KH/edit?usp=drive_link&amp;ouid=111207187639076936346&amp;rtpof=true&amp;sd=true</a></p><p><br></p></div>"
+              }
+            ],
+            "children": []
+          }
+        ]
+      },
+      {
+        "task_id": "TASK-2025-00200",
+        "task_subject": "Phân phối",
+        "task_status": "Open",
+        "task_progress": 0,
+        "task_priority": "Low",
+        "is_group": true,
+        "comments": [],
+        "children": []
+      }
+    ]
+  },
+  {
+    "project_id": "FSM - XK - Nông sản chế biến - Pháp",
+    "project_name": "FSM - XK - Nông sản chế biến - Pháp",
+    "project_status": "Open",
+    "project_company": "Công ty Cổ phần FASSMART",
+    "project_percent": 57.14,
+    "responsible_email": "quang.nguyen@fassmart.com",
+    "tasks": [
+      {
+        "task_id": "TASK-2025-00120",
+        "task_subject": "Tìm nhà cung cấp hạt điều",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "High",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      }
+    ]
+  },
+  {
+    "project_id": "FSM - XK - Takeaway - Pháp",
+    "project_name": "FSM - XK - Takeaway - Pháp",
+    "project_status": "Open",
+    "project_company": "Công ty Cổ phần FASSMART",
+    "project_percent": 0,
+    "responsible_email": "quang.nguyen@fassmart.com",
+    "tasks": [
+      {
+        "task_id": "TASK-2025-00069",
+        "task_subject": "Tìm kiếm - nhà cung cấp giấy Kraft",
+        "task_status": "Working",
+        "task_progress": 100,
+        "task_priority": "High",
+        "is_group": false,
+        "comments": [
+          {
+            "comment_time": "2025-08-15 11:01:30.858885",
+            "comment_owner": "quang.nguyen@fassmart.com",
+            "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Hỏi lại về chất lượng sản phẩm</p></div><div><strong>Nội dung chi tiết:</strong></div><div class=\"ql-editor read-mode\"><p>FD đã có feedback về chất lượng sản phẩm, cần hỏi lại các nhà cung cấp về chất lượng sản phẩm và đàm phán lại giá</p></div>"
+          },
+          {
+            "comment_time": "2025-08-12 10:24:30.781615",
+            "comment_owner": "quang.nguyen@fassmart.com",
+            "comment_html": "<div><p><strong>[TIẾN ĐỘ]</strong>: Bảng báo giá\n</p></div><div><strong>Nội dung chi tiết:</strong></div>\n<div class=\"ql-editor read-mode\"><p>Đã có bảng báo giá</p></div>\n\n<div><strong>Giải pháp đề xuất:</strong></div>\n<div class=\"ql-editor read-mode\"><p>https://docs.google.com/spreadsheets/d/1Z0draUoB8NnsFeC5opI4VbBkU8ogPi2I/edit?usp=drive_link&amp;ouid=111207187639076936346&amp;rtpof=true&amp;sd=true</p></div>\n\n"
+          }
+        ],
+        "children": []
+      },
+      {
+        "task_id": "TASK-2025-00070",
+        "task_subject": "Tìm kiếm - nhà cung cấp giấy Tissue",
+        "task_status": "Working",
+        "task_progress": 100,
+        "task_priority": "High",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      },
+      {
+        "task_id": "TASK-2025-00148",
+        "task_subject": "Tìm kiếm - nhà cung cấp hộp bằng nhựa",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Medium",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      },
+      {
+        "task_id": "TASK-2025-00149",
+        "task_subject": "Tìm kiếm - nhà cung cấp đồ đựng vệ sinh",
+        "task_status": "Working",
+        "task_progress": 0,
+        "task_priority": "Medium",
+        "is_group": false,
+        "comments": [],
+        "children": []
+      }
+    ]
+  }
+]
